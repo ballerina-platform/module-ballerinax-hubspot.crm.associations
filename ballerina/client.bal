@@ -27,7 +27,7 @@ public isolated client class Client {
     # + config - The configurations to be used when initializing the `connector` 
     # + serviceUrl - URL of the target service 
     # + return - An error if connector initialization failed 
-    public isolated function init(ConnectionConfig config, string serviceUrl = "https://api.hubapi.com") returns error? {
+    public isolated function init(ConnectionConfig config, string serviceUrl = "https://api.hubapi.com/crm/v4") returns error? {
         http:ClientConfiguration httpClientConfig = {httpVersion: config.httpVersion, timeout: config.timeout, forwarded: config.forwarded, poolConfig: config.poolConfig, compression: config.compression, circuitBreaker: config.circuitBreaker, retryConfig: config.retryConfig, validation: config.validation};
         do {
             if config.http1Settings is ClientHttp1Settings {
@@ -65,8 +65,8 @@ public isolated client class Client {
     #
     # + headers - Headers to be sent with the request 
     # + return - No content 
-    resource isolated function delete crm/v4/objects/[string objectType]/[string objectId]/associations/[string toObjectType]/[string toObjectId](map<string|string[]> headers = {}) returns http:Response|error {
-        string resourcePath = string `/crm/v4/objects/${getEncodedUri(objectType)}/${getEncodedUri(objectId)}/associations/${getEncodedUri(toObjectType)}/${getEncodedUri(toObjectId)}`;
+    resource isolated function delete objects/[string objectType]/[string objectId]/associations/[string toObjectType]/[string toObjectId](map<string|string[]> headers = {}) returns http:Response|error {
+        string resourcePath = string `/objects/${getEncodedUri(objectType)}/${getEncodedUri(objectId)}/associations/${getEncodedUri(toObjectType)}/${getEncodedUri(toObjectId)}`;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
             headerValues["private-app"] = self.apiKeyConfig?.private\-app;
@@ -81,8 +81,8 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - successful operation 
-    resource isolated function get crm/v4/objects/[string objectType]/[string objectId]/associations/[string toObjectType](map<string|string[]> headers = {}, *GetCrmV4ObjectsObjectTypeObjectIdAssociationsToObjectTypeGetPageQueries queries) returns CollectionResponseMultiAssociatedObjectWithLabelForwardPaging|error {
-        string resourcePath = string `/crm/v4/objects/${getEncodedUri(objectType)}/${getEncodedUri(objectId)}/associations/${getEncodedUri(toObjectType)}`;
+    resource isolated function get objects/[string objectType]/[string objectId]/associations/[string toObjectType](map<string|string[]> headers = {}, *GetObjectsObjectTypeObjectIdAssociationsToObjectTypeGetPageQueries queries) returns CollectionResponseMultiAssociatedObjectWithLabelForwardPaging|error {
+        string resourcePath = string `/objects/${getEncodedUri(objectType)}/${getEncodedUri(objectId)}/associations/${getEncodedUri(toObjectType)}`;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
             headerValues["private-app"] = self.apiKeyConfig?.private\-app;
@@ -97,8 +97,8 @@ public isolated client class Client {
     #
     # + headers - Headers to be sent with the request 
     # + return - No content 
-    resource isolated function post crm/v4/associations/[string fromObjectType]/[string toObjectType]/batch/archive(BatchInputPublicAssociationMultiArchive payload, map<string|string[]> headers = {}) returns http:Response|error {
-        string resourcePath = string `/crm/v4/associations/${getEncodedUri(fromObjectType)}/${getEncodedUri(toObjectType)}/batch/archive`;
+    resource isolated function post associations/[string fromObjectType]/[string toObjectType]/batch/archive(BatchInputPublicAssociationMultiArchive payload, map<string|string[]> headers = {}) returns http:Response|error {
+        string resourcePath = string `/associations/${getEncodedUri(fromObjectType)}/${getEncodedUri(toObjectType)}/batch/archive`;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
             headerValues["private-app"] = self.apiKeyConfig?.private\-app;
@@ -115,8 +115,8 @@ public isolated client class Client {
     #
     # + headers - Headers to be sent with the request 
     # + return - successful operation 
-    resource isolated function post crm/v4/associations/[string fromObjectType]/[string toObjectType]/batch/associate/default(BatchInputPublicDefaultAssociationMultiPost payload, map<string|string[]> headers = {}) returns BatchResponsePublicDefaultAssociation|error {
-        string resourcePath = string `/crm/v4/associations/${getEncodedUri(fromObjectType)}/${getEncodedUri(toObjectType)}/batch/associate/default`;
+    resource isolated function post associations/[string fromObjectType]/[string toObjectType]/batch/associate/default(BatchInputPublicDefaultAssociationMultiPost payload, map<string|string[]> headers = {}) returns BatchResponsePublicDefaultAssociation|error {
+        string resourcePath = string `/associations/${getEncodedUri(fromObjectType)}/${getEncodedUri(toObjectType)}/batch/associate/default`;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
             headerValues["private-app"] = self.apiKeyConfig?.private\-app;
@@ -133,8 +133,8 @@ public isolated client class Client {
     #
     # + headers - Headers to be sent with the request 
     # + return - successful operation 
-    resource isolated function post crm/v4/associations/[string fromObjectType]/[string toObjectType]/batch/create(BatchInputPublicAssociationMultiPost payload, map<string|string[]> headers = {}) returns BatchResponseLabelsBetweenObjectPair|BatchResponseLabelsBetweenObjectPairWithErrors|error {
-        string resourcePath = string `/crm/v4/associations/${getEncodedUri(fromObjectType)}/${getEncodedUri(toObjectType)}/batch/create`;
+    resource isolated function post associations/[string fromObjectType]/[string toObjectType]/batch/create(BatchInputPublicAssociationMultiPost payload, map<string|string[]> headers = {}) returns BatchResponseLabelsBetweenObjectPair|BatchResponseLabelsBetweenObjectPairWithErrors|error {
+        string resourcePath = string `/associations/${getEncodedUri(fromObjectType)}/${getEncodedUri(toObjectType)}/batch/create`;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
             headerValues["private-app"] = self.apiKeyConfig?.private\-app;
@@ -151,8 +151,8 @@ public isolated client class Client {
     #
     # + headers - Headers to be sent with the request 
     # + return - No content 
-    resource isolated function post crm/v4/associations/[string fromObjectType]/[string toObjectType]/batch/labels/archive(BatchInputPublicAssociationMultiPost payload, map<string|string[]> headers = {}) returns http:Response|error {
-        string resourcePath = string `/crm/v4/associations/${getEncodedUri(fromObjectType)}/${getEncodedUri(toObjectType)}/batch/labels/archive`;
+    resource isolated function post associations/[string fromObjectType]/[string toObjectType]/batch/labels/archive(BatchInputPublicAssociationMultiPost payload, map<string|string[]> headers = {}) returns http:Response|error {
+        string resourcePath = string `/associations/${getEncodedUri(fromObjectType)}/${getEncodedUri(toObjectType)}/batch/labels/archive`;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
             headerValues["private-app"] = self.apiKeyConfig?.private\-app;
@@ -169,8 +169,8 @@ public isolated client class Client {
     #
     # + headers - Headers to be sent with the request 
     # + return - successful operation 
-    resource isolated function post crm/v4/associations/[string fromObjectType]/[string toObjectType]/batch/read(BatchInputPublicFetchAssociationsBatchRequest payload, map<string|string[]> headers = {}) returns BatchResponsePublicAssociationMultiWithLabel|BatchResponsePublicAssociationMultiWithLabelWithErrors|error {
-        string resourcePath = string `/crm/v4/associations/${getEncodedUri(fromObjectType)}/${getEncodedUri(toObjectType)}/batch/read`;
+    resource isolated function post associations/[string fromObjectType]/[string toObjectType]/batch/read(BatchInputPublicFetchAssociationsBatchRequest payload, map<string|string[]> headers = {}) returns BatchResponsePublicAssociationMultiWithLabel|BatchResponsePublicAssociationMultiWithLabelWithErrors|error {
+        string resourcePath = string `/associations/${getEncodedUri(fromObjectType)}/${getEncodedUri(toObjectType)}/batch/read`;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
             headerValues["private-app"] = self.apiKeyConfig?.private\-app;
@@ -188,8 +188,8 @@ public isolated client class Client {
     # + userId -
     # + headers - Headers to be sent with the request 
     # + return - successful operation 
-    resource isolated function post crm/v4/associations/usage/high\-usage\-report/[int:Signed32 userId](map<string|string[]> headers = {}) returns ReportCreationResponse|error {
-        string resourcePath = string `/crm/v4/associations/usage/high-usage-report/${getEncodedUri(userId)}`;
+    resource isolated function post associations/usage/high\-usage\-report/[int:Signed32 userId](map<string|string[]> headers = {}) returns ReportCreationResponse|error {
+        string resourcePath = string `/associations/usage/high-usage-report/${getEncodedUri(userId)}`;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
             headerValues["private-app"] = self.apiKeyConfig?.private\-app;
@@ -204,8 +204,8 @@ public isolated client class Client {
     #
     # + headers - Headers to be sent with the request 
     # + return - successful operation 
-    resource isolated function put crm/v4/objects/[string fromObjectType]/[string fromObjectId]/associations/default/[string toObjectType]/[string toObjectId](map<string|string[]> headers = {}) returns BatchResponsePublicDefaultAssociation|error {
-        string resourcePath = string `/crm/v4/objects/${getEncodedUri(fromObjectType)}/${getEncodedUri(fromObjectId)}/associations/default/${getEncodedUri(toObjectType)}/${getEncodedUri(toObjectId)}`;
+    resource isolated function put objects/[string fromObjectType]/[string fromObjectId]/associations/default/[string toObjectType]/[string toObjectId](map<string|string[]> headers = {}) returns BatchResponsePublicDefaultAssociation|error {
+        string resourcePath = string `/objects/${getEncodedUri(fromObjectType)}/${getEncodedUri(fromObjectId)}/associations/default/${getEncodedUri(toObjectType)}/${getEncodedUri(toObjectId)}`;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
             headerValues["private-app"] = self.apiKeyConfig?.private\-app;
@@ -220,8 +220,8 @@ public isolated client class Client {
     #
     # + headers - Headers to be sent with the request 
     # + return - successful operation 
-    resource isolated function put crm/v4/objects/[string objectType]/[string objectId]/associations/[string toObjectType]/[string toObjectId](AssociationSpec[] payload, map<string|string[]> headers = {}) returns LabelsBetweenObjectPair|error {
-        string resourcePath = string `/crm/v4/objects/${getEncodedUri(objectType)}/${getEncodedUri(objectId)}/associations/${getEncodedUri(toObjectType)}/${getEncodedUri(toObjectId)}`;
+    resource isolated function put objects/[string objectType]/[string objectId]/associations/[string toObjectType]/[string toObjectId](AssociationSpec[] payload, map<string|string[]> headers = {}) returns LabelsBetweenObjectPair|error {
+        string resourcePath = string `/objects/${getEncodedUri(objectType)}/${getEncodedUri(objectId)}/associations/${getEncodedUri(toObjectType)}/${getEncodedUri(toObjectId)}`;
         map<anydata> headerValues = {...headers};
         if self.apiKeyConfig is ApiKeysConfig {
             headerValues["private-app"] = self.apiKeyConfig?.private\-app;

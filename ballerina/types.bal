@@ -156,11 +156,6 @@ public type PublicObjectId record {
     string id;
 };
 
-public type PublicAssociationMultiArchive record {
-    PublicObjectId 'from;
-    PublicObjectId[] to;
-};
-
 public type BatchResponsePublicAssociationMultiWithLabelWithErrors record {
     string completedAt;
     int:Signed32 numErrors?;
@@ -170,6 +165,11 @@ public type BatchResponsePublicAssociationMultiWithLabelWithErrors record {
     PublicAssociationMultiWithLabel[] results;
     StandardError[] errors?;
     "PENDING"|"PROCESSING"|"CANCELED"|"COMPLETE" status;
+};
+
+public type PublicAssociationMultiArchive record {
+    PublicObjectId 'from;
+    PublicObjectId[] to;
 };
 
 public type Paging record {
@@ -198,14 +198,6 @@ public type ProxyConfig record {|
 
 public type BatchInputPublicAssociationMultiPost record {
     PublicAssociationMultiPost[] inputs;
-};
-
-# Represents the Queries record for the operation: get-/crm/v4/objects/{objectType}/{objectId}/associations/{toObjectType}_getPage
-public type GetCrmV4ObjectsObjectTypeObjectIdAssociationsToObjectTypeGetPageQueries record {
-    # The maximum number of results to display per page.
-    int:Signed32 'limit = 500;
-    # The paging cursor token of the last successfully read resource will be returned as the `paging.next.after` JSON property of a paged response containing more results.
-    string after?;
 };
 
 public type PublicDefaultAssociationMultiPost record {
@@ -276,6 +268,14 @@ public type CollectionResponseMultiAssociatedObjectWithLabelForwardPaging record
 public type NextPage record {
     string link?;
     string after;
+};
+
+# Represents the Queries record for the operation: get-/objects/{objectType}/{objectId}/associations/{toObjectType}_getPage
+public type GetObjectsObjectTypeObjectIdAssociationsToObjectTypeGetPageQueries record {
+    # The maximum number of results to display per page.
+    int:Signed32 'limit = 500;
+    # The paging cursor token of the last successfully read resource will be returned as the `paging.next.after` JSON property of a paged response containing more results.
+    string after?;
 };
 
 # Provides API key configurations needed when communicating with a remote HTTP endpoint.
