@@ -64,7 +64,7 @@ public isolated client class Client {
     # Delete
     #
     # + headers - Headers to be sent with the request 
-    # + return - No content 
+    # + return - Returns `http:Response` with status **204 No Content** on success, indicating successful deletion. 
     resource isolated function delete objects/[string objectType]/[string objectId]/associations/[string toObjectType]/[string toObjectId](map<string|string[]> headers = {}) returns http:Response|error {
         string resourcePath = string `/objects/${getEncodedUri(objectType)}/${getEncodedUri(objectId)}/associations/${getEncodedUri(toObjectType)}/${getEncodedUri(toObjectId)}`;
         map<anydata> headerValues = {...headers};
@@ -76,7 +76,7 @@ public isolated client class Client {
         return self.clientEp->delete(resourcePath, headers = httpHeaders);
     }
 
-    # List
+    # List Associations of an Object by Type
     #
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
@@ -93,10 +93,10 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, httpHeaders);
     }
 
-    # Delete
+    # Removes Links Between Objects
     #
     # + headers - Headers to be sent with the request 
-    # + return - No content 
+    # + return - Returns `http:Response` with status **204 No Content** on success, indicating successful deletion. 
     resource isolated function post associations/[string fromObjectType]/[string toObjectType]/batch/archive(BatchInputPublicAssociationMultiArchive payload, map<string|string[]> headers = {}) returns http:Response|error {
         string resourcePath = string `/associations/${getEncodedUri(fromObjectType)}/${getEncodedUri(toObjectType)}/batch/archive`;
         map<anydata> headerValues = {...headers};
@@ -111,7 +111,7 @@ public isolated client class Client {
         return self.clientEp->post(resourcePath, request, httpHeaders);
     }
 
-    #  Create Default Associations
+    # Creates a Default HubSpot-Defined Association
     #
     # + headers - Headers to be sent with the request 
     # + return - successful operation 
@@ -129,7 +129,7 @@ public isolated client class Client {
         return self.clientEp->post(resourcePath, request, httpHeaders);
     }
 
-    # Create
+    # Creates Custom Associations
     #
     # + headers - Headers to be sent with the request 
     # + return - successful operation 
@@ -150,7 +150,7 @@ public isolated client class Client {
     # Delete Specific Labels
     #
     # + headers - Headers to be sent with the request 
-    # + return - No content 
+    # + return - Returns `http:Response` with status **204 No Content** on success, indicating successful deletion. 
     resource isolated function post associations/[string fromObjectType]/[string toObjectType]/batch/labels/archive(BatchInputPublicAssociationMultiPost payload, map<string|string[]> headers = {}) returns http:Response|error {
         string resourcePath = string `/associations/${getEncodedUri(fromObjectType)}/${getEncodedUri(toObjectType)}/batch/labels/archive`;
         map<anydata> headerValues = {...headers};
@@ -165,7 +165,7 @@ public isolated client class Client {
         return self.clientEp->post(resourcePath, request, httpHeaders);
     }
 
-    # Read
+    # Read Associations
     #
     # + headers - Headers to be sent with the request 
     # + return - successful operation 
@@ -200,7 +200,7 @@ public isolated client class Client {
         return self.clientEp->post(resourcePath, request, httpHeaders);
     }
 
-    # Create Default
+    # Create Default Association Between Two Object Types
     #
     # + headers - Headers to be sent with the request 
     # + return - successful operation 
@@ -216,7 +216,7 @@ public isolated client class Client {
         return self.clientEp->put(resourcePath, request, httpHeaders);
     }
 
-    # Create
+    # Create Association Labels Between Two Records
     #
     # + headers - Headers to be sent with the request 
     # + return - successful operation 

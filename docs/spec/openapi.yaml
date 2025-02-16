@@ -26,7 +26,7 @@ paths:
     post:
       tags:
       - Batch
-      summary: Delete
+      summary: Removes Links Between Objects
       description: Batch delete associations for objects
       operationId: "post-/associations/{fromObjectType}/{toObjectType}/batch/archive_archive"
       parameters:
@@ -52,7 +52,7 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: Returns `http:Response` with status **204 No Content** on success, indicating successful deletion.
           content: {}
         default:
           description: An error occurred.
@@ -217,7 +217,7 @@ paths:
     post:
       tags:
       - Batch
-      summary: Create
+      summary: Creates Custom Associations
       description: Batch create associations for objects
       operationId: "post-/associations/{fromObjectType}/{toObjectType}/batch/create_create"
       parameters:
@@ -629,7 +629,7 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: Returns `http:Response` with status **204 No Content** on success, indicating successful deletion.
           content: {}
         default:
           description: An error occurred.
@@ -794,7 +794,7 @@ paths:
     post:
       tags:
       - Batch
-      summary: Read
+      summary: Read Associations
       description: "Batch read associations for objects to specific object type. The\
         \ 'after' field in a returned paging object  can be added alongside the 'id'\
         \ to retrieve the next page of associations from that objectId. The 'link'\
@@ -998,7 +998,7 @@ paths:
     post:
       tags:
       - Batch
-      summary: ' Create Default Associations'
+      summary: Creates a Default HubSpot-Defined Association
       description: Create the default (most generic) association type between two
         object types
       operationId: "post-/associations/{fromObjectType}/{toObjectType}/batch/associate/default_createDefault"
@@ -1193,7 +1193,7 @@ paths:
     put:
       tags:
       - Basic
-      summary: Create
+      summary: Create Association Labels Between Two Records
       description: Set association labels between two records.
       operationId: "put-/objects/{objectType}/{objectId}/associations/{toObjectType}/{toObjectId}_create"
       parameters:
@@ -1434,7 +1434,7 @@ paths:
           type: string
       responses:
         "204":
-          description: No content
+          description: Returns `http:Response` with status **204 No Content** on success, indicating successful deletion.
           content: {}
         default:
           description: An error occurred.
@@ -1597,7 +1597,7 @@ paths:
     get:
       tags:
       - Basic
-      summary: List
+      summary: List Associations of an Object by Type
       description: List all associations of an object by object type. Limit 500 per
         call.
       operationId: "get-/objects/{objectType}/{objectId}/associations/{toObjectType}_getPage"
@@ -1811,7 +1811,7 @@ paths:
     put:
       tags:
       - Basic
-      summary: Create Default
+      summary: Create Default Association Between Two Object Types
       description: Create the default (most generic) association type between two
         object types
       operationId: "put-/objects/{fromObjectType}/{fromObjectId}/associations/default/{toObjectType}/{toObjectId}_createDefault"
