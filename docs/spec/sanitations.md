@@ -37,6 +37,18 @@ These changes are done in order to improve the overall usability, and as workaro
 
 - **Reason**: These updates improve readability, making it easier for developers to understand API functionality and expected responses at a glance.
 
+5. Change `AssociationSpecWithLabel label` to Nullable
+- **Original**: The `label` field in AssociationSpecWithLabel was `not nullable`.
+
+- **Updated**: The `label` field has been updated to be `nullable`.
+- **Reason**: The HubSpot API can return a null value for this field, so making it nullable ensures accurate representation of API responses.
+
+6. Change `typeId` from `String` to Integer
+- **Original**: The `typeId` field was defined as a `string`.
+
+- **Updated**: The `typeId` field has been changed to an `integer`.
+- **Reason**: The HubSpot API can return a null value for this field, so making it nullable ensures accurate representation of API responses.
+
 ## OpenAPI cli command
 
 The following command was used to generate the Ballerina client from the OpenAPI specification. The command should be executed from the repository root directory.

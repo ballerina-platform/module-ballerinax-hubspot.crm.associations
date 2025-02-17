@@ -60,7 +60,7 @@ public type BatchInputPublicAssociationMultiArchive record {
 
 public type MultiAssociatedObjectWithLabel record {
     AssociationSpecWithLabel[] associationTypes;
-    string toObjectId;
+    int toObjectId;
 };
 
 public type DateTime record {
@@ -88,7 +88,7 @@ public type ForwardPaging record {
 
 public type AssociationSpecWithLabel record {
     int:Signed32 typeId;
-    string label?;
+    string? label?;
     "HUBSPOT_DEFINED"|"USER_DEFINED"|"INTEGRATOR_DEFINED" category;
 };
 

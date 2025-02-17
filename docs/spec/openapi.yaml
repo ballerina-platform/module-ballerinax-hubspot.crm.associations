@@ -2123,7 +2123,7 @@ components:
           items:
             $ref: '#/components/schemas/AssociationSpecWithLabel'
         toObjectId:
-          type: string
+          type: integer
     DateTime:
       required:
       - dateOnly
@@ -2185,6 +2185,7 @@ components:
           format: int32
         label:
           type: string
+          nullable: true
         category:
           type: string
           enum:
