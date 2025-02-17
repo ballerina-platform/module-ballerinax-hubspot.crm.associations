@@ -55,6 +55,11 @@ These changes are done in order to improve the overall usability, and as workaro
 - **Updated**: `Both` fields are now `integer`.
 - **Reason**: The HubSpot API returns these IDs as integers instead of strings, so updating their types ensures accurate representation.
 
+8. Change `int:signed32` to `int` in `DateTime Record`
+- **Original**: `"int:signed32 value"`
+
+- **Updated**:`"int value"`
+- **Reason**: The field `value` in the DateTime record can hold a larger value than int:signed32 can accommodate. Therefore, int:signed32 has been replaced with integer to allow for larger values.
 ## OpenAPI cli command
 
 The following command was used to generate the Ballerina client from the OpenAPI specification. The command should be executed from the repository root directory.

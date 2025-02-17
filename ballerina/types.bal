@@ -66,7 +66,7 @@ public type MultiAssociatedObjectWithLabel record {
 public type DateTime record {
     boolean dateOnly;
     int:Signed32 timeZoneShift;
-    int:Signed32 value;
+    int value;
 };
 
 public type ErrorDetail record {
