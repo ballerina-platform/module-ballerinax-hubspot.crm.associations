@@ -1400,7 +1400,7 @@ paths:
     delete:
       tags:
       - Basic
-      summary: Delete
+      summary: Deletes all associations between two records
       description: deletes all associations between two records.
       operationId: "delete-/objects/{objectType}/{objectId}/associations/{toObjectType}/{toObjectId}_archive"
       parameters:

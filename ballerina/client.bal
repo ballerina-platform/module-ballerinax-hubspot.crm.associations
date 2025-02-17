@@ -61,7 +61,7 @@ public isolated client class Client {
         return;
     }
 
-    # Delete
+    # Deletes all associations between two records
     #
     # + headers - Headers to be sent with the request 
     # + return - Returns `http:Response` with status **204 No Content** on success, indicating successful deletion. 

@@ -1,6 +1,6 @@
 _Author_:  @arunapriyadarshana \
-_Created_: 14.02.2025 \
-_Updated_: 17.02.2025 \
+_Created_: 2025/02/14 \
+_Updated_: 2025/02/17 \
 _Edition_: Swan Lake
 
 # Sanitation for OpenAPI specification
@@ -32,7 +32,7 @@ These changes are done in order to improve the overall usability, and as workaro
 - **Original**: `"foramt":"date-time"`
 - **Updated**: `"foramt":"datetime"`
 
-- **Reason**: The date-time format is not compatible with the openAPI generation tool. Therefore, it is updated to datetime to make it compatible with the generation tool.
+- **Reason**: The `date-time` format is not compatible with the openAPI generation tool. Therefore, it is updated to `datetime` to make it compatible with the generation tool.
 
 4. Enhance API Summaries and Return Descriptions 
 - **Original**: API summaries were too generic, often using single-word descriptions like "create", "read", or "delete", which lacked sufficient detail about their functionality. Similarly, return descriptions were too vague, such as "no contact" for a delete operation, providing little clarity on the response.
@@ -46,6 +46,6 @@ These changes are done in order to improve the overall usability, and as workaro
 The following command was used to generate the Ballerina client from the OpenAPI specification. The command should be executed from the repository root directory.
 
 ```bash
-bal openapi -i ./docs/spec/openapi.yaml -o ./ballerina --mode client  --license ./docs/license.txt
+bal openapi -i docs/spec/openapi.yaml -o ballerina --mode client --license docs/license.txt
 ```
 Note: The license year is hardcoded to 2025, change if necessary.
