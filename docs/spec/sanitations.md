@@ -1,6 +1,6 @@
 _Author_:  @arunapriyadarshana \
 _Created_: 14.02.2025 \
-_Updated_: 16.02.2025 \
+_Updated_: 17.02.2025 \
 _Edition_: Swan Lake
 
 # Sanitation for OpenAPI specification
@@ -33,6 +33,13 @@ These changes are done in order to improve the overall usability, and as workaro
 - **Updated**: `"foramt":"datetime"`
 
 - **Reason**: The date-time format is not compatible with the openAPI generation tool. Therefore, it is updated to datetime to make it compatible with the generation tool.
+
+4. Enhance API Summaries and Return Descriptions 
+- **Original**: API summaries were too generic, often using single-word descriptions like "create", "read", or "delete", which lacked sufficient detail about their functionality. Similarly, return descriptions were too vague, such as "no contact" for a delete operation, providing little clarity on the response.
+
+- **Updated**: Each API summary has been revised to provide a clearer, more meaningful description of its purpose. Additionally, return descriptions now explicitly specify the response format, HTTP status codes, and expected results.
+
+- **Reason**: These updates improve readability, making it easier for developers to understand API functionality and expected responses at a glance.
 
 ## OpenAPI cli command
 
