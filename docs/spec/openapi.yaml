@@ -2057,11 +2057,11 @@ components:
         fromObjectTypeId:
           type: string
         toObjectId:
-          type: string
+          type: integer
         toObjectTypeId:
           type: string
         fromObjectId:
-          type: string
+          type: integer
         labels:
           type: array
           items:

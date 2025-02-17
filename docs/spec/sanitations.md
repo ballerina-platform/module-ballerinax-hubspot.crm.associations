@@ -49,6 +49,12 @@ These changes are done in order to improve the overall usability, and as workaro
 - **Updated**: The `typeId` field has been changed to an `integer`.
 - **Reason**: The HubSpot API can return a null value for this field, so making it nullable ensures accurate representation of API responses.
 
+7. Update `LabelsBetweenObjectPair` to change `toObjectId` and `fromObjectId` from string to integer
+- **Original**: `toObjectId` and `fromObjectId` were defined as `string`.
+
+- **Updated**: `Both` fields are now `integer`.
+- **Reason**: The HubSpot API returns these IDs as integers instead of strings, so updating their types ensures accurate representation.
+
 ## OpenAPI cli command
 
 The following command was used to generate the Ballerina client from the OpenAPI specification. The command should be executed from the repository root directory.

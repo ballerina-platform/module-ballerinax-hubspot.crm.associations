@@ -32,9 +32,9 @@ public type StandardError record {
 
 public type LabelsBetweenObjectPair record {
     string fromObjectTypeId;
-    string toObjectId;
+    int toObjectId;
     string toObjectTypeId;
-    string fromObjectId;
+    int fromObjectId;
     string[] labels;
 };
 
