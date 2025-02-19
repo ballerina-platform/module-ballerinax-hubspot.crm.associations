@@ -55,9 +55,7 @@ final int:Signed32 mockUserId = 77406593;
 }
 isolated function testGetAssociationsList() returns error? {
     CollectionResponseMultiAssociatedObjectWithLabelForwardPaging response = check hubspotAssociations->/objects/[mockFromObjectType]/[mockFromObjectId]/associations/[mockToObjectType].get();
-
     test:assertTrue(response.results.length() > 0, msg = "Expected at least one association, but found none.");
-
 }
 
 @test:Config {
@@ -75,7 +73,6 @@ isolated function testCreateDefaultAssociation() returns error? {
         }
     );
     test:assertTrue(response.results.length() > 0, msg = "Expected at least one default association to be created, but none were found.");
-
 }
 
 @test:Config {
@@ -98,10 +95,8 @@ isolated function testCreateCustomAssociation() returns error? {
             ]
         }
     );
-
     test:assertTrue(response.results.length() > 0,
             msg = "Expected at least one association to be created, but none were found.");
-
 }
 
 @test:Config {
@@ -117,7 +112,6 @@ isolated function testReadAssociation() returns error? {
             ]
         }
     );
-
     test:assertTrue(response.results.length() > 0, msg = "Expected at least one association for the given object, but no associations were found.");
 }
 
@@ -126,9 +120,7 @@ isolated function testReadAssociation() returns error? {
 }
 isolated function testReport() returns error? {
     ReportCreationResponse response = check hubspotAssociations->/associations/usage/high\-usage\-report/[mockUserId].post({});
-
     test:assertEquals(response.userId, mockUserId, msg = string `Expected userId to be ${mockUserId.toString()}, but got ${response.userId.toString()}`);
-
 }
 
 @test:Config {
@@ -136,7 +128,6 @@ isolated function testReport() returns error? {
 }
 isolated function testCreateDefaultAssociationType() returns error? {
     BatchResponsePublicDefaultAssociation response = check hubspotAssociations->/objects/[mockFromObjectType]/[mockFromObjectId]/associations/default/[mockToObjectType]/[mockToObjectId].put({});
-
     test:assertTrue(response.results.length() > 0, msg = "Expected at least one default association to be created, but found none.");
 }
 
@@ -152,7 +143,6 @@ isolated function testCreateAssociationLabel() returns error? {
             }
         ]
     );
-
     test:assertEquals(response.fromObjectId.toString(), mockFromObjectId, msg = string `Expected toObjectId to be ${mockToObjectId.toString()} but got ${response.toObjectId.toString()}`);
     test:assertEquals(response.toObjectId.toString(), mockToObjectId, msg = string `Expected toObjectId to be ${mockToObjectId.toString()}, but got ${response.toObjectId.toString()}`);
 }
@@ -175,10 +165,8 @@ isolated function testRemoveAssociationBetweenObject() returns error? {
             ]
         }
     );
-
     test:assertEquals(response.statusCode, 204,
             msg = string `Expected status code 204 but got ${response.statusCode}`);
-
 }
 
 @test:Config {
@@ -203,7 +191,6 @@ isolated function testDeleteSpecificLables() returns error? {
     );
     test:assertEquals(response.statusCode, 204,
             msg = string `Expected status code 204 but got ${response.statusCode}`);
-
 }
 
 @test:Config {
@@ -211,10 +198,8 @@ isolated function testDeleteSpecificLables() returns error? {
 }
 isolated function testDeleteAllAssociations() returns error? {
     http:Response response = check hubspotAssociations->/objects/[mockToObjectType]/[mockToObjectId]/associations/[mockFromObjectType]/[mockFromObjectId].delete();
-
     test:assertEquals(response.statusCode, 204,
             msg = string `Expected status code 204 but got ${response.statusCode}`);
-
 }
 
 @test:Config {
@@ -222,7 +207,6 @@ isolated function testDeleteAllAssociations() returns error? {
 }
 isolated function testGetAssociationsListByInvalidObjectType() returns error? {
     CollectionResponseMultiAssociatedObjectWithLabelForwardPaging|error response = hubspotAssociations->/objects/["dea"]/[mockFromObjectId]/associations/invalidObjectType.get();
-
     test:assertTrue(response is error, msg = "Expected an error response, but got a successful response.");
 }
 
@@ -240,7 +224,6 @@ isolated function testCreateDefaultAssociationByInvalidObjectType() returns erro
             ]
         }
     );
-
     test:assertTrue(response is error, msg = "Expected an error response, but got a successful response.");
 }
 
@@ -264,7 +247,6 @@ isolated function testCreateCustomAssociationByInvalidObjectType() returns error
             ]
         }
     );
-
     test:assertTrue(response is error, msg = "Expected an error response, but got a successful response.");
 }
 
@@ -288,8 +270,7 @@ isolated function testDeleteSpecificLablesByInvalidObjectType() returns error? {
             ]
         }
     );
-
-    if (response is http:Response) {
+    if response is http:Response {
         test:assertEquals(response.statusCode, 400,
                 msg = string `Expected status code 400 but got ${response.statusCode}`);
     }
@@ -300,8 +281,7 @@ isolated function testDeleteSpecificLablesByInvalidObjectType() returns error? {
 }
 isolated function testDeleteAllAssociationsByInvalidObjectType() returns error? {
     http:Response|error response = hubspotAssociations->/objects/["com"]/["38056537829"]/associations/["dea"]/["41479955131"].delete();
-
-    if (response is http:Response) {
+    if response is http:Response {
         test:assertEquals(response.statusCode, 400,
                 msg = string `Expected status code 400 but got ${response.statusCode}`);
     }
@@ -325,10 +305,8 @@ isolated function testRemoveAssociationBetweenObjectByInvalidObjectType() return
             ]
         }
     );
-
-    if (response is http:Response) {
+    if response is http:Response {
         test:assertEquals(response.statusCode, 400,
                 msg = string `Expected status code 400 but got ${response.statusCode}`);
     }
 }
-
