@@ -15,7 +15,6 @@
 // under the License.
 
 import ballerina/http;
-import ballerina/io;
 import ballerina/oauth2;
 import ballerina/test;
 
@@ -75,9 +74,6 @@ isolated function testCreateDefaultAssociation() returns error? {
             ]
         }
     );
-
-    io:println(response);
-
     test:assertTrue(response.results.length() > 0, msg = "Expected at least one default association to be created, but none were found.");
 
 }
@@ -205,9 +201,6 @@ isolated function testDeleteSpecificLables() returns error? {
             ]
         }
     );
-
-    io:println(response);
-
     test:assertEquals(response.statusCode, 204,
             msg = string `Expected status code 204 but got ${response.statusCode}`);
 
