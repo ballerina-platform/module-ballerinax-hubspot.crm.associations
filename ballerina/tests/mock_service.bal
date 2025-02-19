@@ -42,7 +42,6 @@ http:Service mockService = service object {
     # http:Ok (successful operation)
     # http:DefaultStatusCodeResponse (An error occurred.)
     resource function get objects/[string objectType]/[string objectId]/associations/[string toObjectType](string? after, int:Signed32 'limit = 500) returns CollectionResponseMultiAssociatedObjectWithLabelForwardPaging|error {
-
         if objectType == mockFromObjectType && objectId == mockFromObjectId && toObjectType == mockToObjectType {
             return {
                 "results": [
@@ -81,7 +80,6 @@ http:Service mockService = service object {
         } else {
             return error("Unable to infer object type from: " + objectType);
         }
-
     }
 
     # Removes Links Between Objects
@@ -103,7 +101,6 @@ http:Service mockService = service object {
     # http:Ok (successful operation)
     # http:DefaultStatusCodeResponse (An error occurred.)
     resource function post associations/[string fromObjectType]/[string toObjectType]/batch/associate/default(@http:Payload BatchInputPublicDefaultAssociationMultiPost payload) returns BatchResponsePublicDefaultAssociation|error {
-
         if fromObjectType == mockFromObjectType && toObjectType == mockToObjectType {
             return {
                 "status": "COMPLETE",
@@ -155,7 +152,6 @@ http:Service mockService = service object {
         } else {
             return error("Unable to infer object type from: " + fromObjectType);
         }
-
     }
 
     # Delete Specific Labels
@@ -278,7 +274,6 @@ http:Service mockService = service object {
     # http:Created (successful operation)
     # http:DefaultStatusCodeResponse (An error occurred.)
     resource function put objects/[string objectType]/[string objectId]/associations/[string toObjectType]/[string toObjectId](@http:Payload AssociationSpec[] payload) returns LabelsBetweenObjectPair|error {
-
         return {
             "fromObjectTypeId": "0-3",
             "fromObjectId": 41479955131,
@@ -287,7 +282,6 @@ http:Service mockService = service object {
             "labels": ["d->c"]
         };
     }
-
 };
 
 function init() returns error? {
