@@ -44,34 +44,34 @@ http:Service mockService = service object {
     resource function get objects/[string objectType]/[string objectId]/associations/[string toObjectType](string? after, int:Signed32 'limit = 500) returns CollectionResponseMultiAssociatedObjectWithLabelForwardPaging|error {
         if objectType == mockFromObjectType && objectId == mockFromObjectId && toObjectType == mockToObjectType {
             return {
-                "results": [
+                results: [
                     {
-                        "toObjectId": 38056537805,
-                        "associationTypes": [
+                        toObjectId: 38056537805,
+                        associationTypes: [
                             {
-                                "category": "HUBSPOT_DEFINED",
-                                "typeId": 5,
-                                "label": "Primary"
+                                category: "HUBSPOT_DEFINED",
+                                typeId: 5,
+                                label: "Primary"
                             },
                             {
-                                "category": "HUBSPOT_DEFINED",
-                                "typeId": 341,
-                                "label": null
+                                category: "HUBSPOT_DEFINED",
+                                typeId: 341,
+                                label: null
                             }
                         ]
                     },
                     {
-                        "toObjectId": 38056537829,
-                        "associationTypes": [
+                        toObjectId: 38056537829,
+                        associationTypes: [
                             {
-                                "category": "USER_DEFINED",
-                                "typeId": 9,
-                                "label": "d->c"
+                                category: "USER_DEFINED",
+                                typeId: 9,
+                                label: "d->c"
                             },
                             {
-                                "category": "HUBSPOT_DEFINED",
-                                "typeId": 341,
-                                "label": null
+                                category: "HUBSPOT_DEFINED",
+                                typeId: 341,
+                                label: null
                             }
                         ]
                     }
@@ -103,23 +103,23 @@ http:Service mockService = service object {
     resource function post associations/[string fromObjectType]/[string toObjectType]/batch/associate/default(@http:Payload BatchInputPublicDefaultAssociationMultiPost payload) returns BatchResponsePublicDefaultAssociation|error {
         if fromObjectType == mockFromObjectType && toObjectType == mockToObjectType {
             return {
-                "status": "COMPLETE",
-                "results": [
+                status: "COMPLETE",
+                results: [
                     {
-                        "from": {
-                            "id": mockFromObjectId
+                        'from: {
+                            id: mockFromObjectId
                         },
-                        "to": {
-                            "id": mockToObjectId
+                        to: {
+                            id: mockToObjectId
                         },
-                        "associationSpec": {
-                            "associationCategory": "HUBSPOT_DEFINED",
-                            "associationTypeId": 341
+                        associationSpec: {
+                            associationCategory: "HUBSPOT_DEFINED",
+                            associationTypeId: 341
                         }
                     }
                 ],
-                "startedAt": "2025-02-16T06:38:42.797Z",
-                "completedAt": "2025-02-16T06:38:42.890Z"
+                startedAt: "2025-02-16T06:38:42.797Z",
+                completedAt: "2025-02-16T06:38:42.890Z"
             };
         } else {
             return error("Unable to infer object type from: " + fromObjectType);
@@ -135,19 +135,18 @@ http:Service mockService = service object {
     resource function post associations/[string fromObjectType]/[string toObjectType]/batch/create(@http:Payload BatchInputPublicAssociationMultiPost payload) returns BatchResponseLabelsBetweenObjectPair|error {
         if fromObjectType == mockFromObjectType && toObjectType == mockToObjectType {
             return {
-                "status": "COMPLETE",
-                "results": [
+                status: "COMPLETE",
+                results: [
                     {
-                        "fromObjectTypeId":
-                        "0-3",
-                        "fromObjectId": 41479955131,
-                        "toObjectTypeId": "0-2",
-                        "toObjectId": 38056537805,
-                        "labels": ["d->c"]
+                        fromObjectTypeId: "0-3",
+                        fromObjectId: 41479955131,
+                        toObjectTypeId: "0-2",
+                        toObjectId: 38056537805,
+                        labels: ["d->c"]
                     }
                 ],
-                "startedAt": "2025-02-18T08:53:51.080Z",
-                "completedAt": "2025-02-18T08:53:51.205Z"
+                startedAt: "2025-02-18T08:53:51.080Z",
+                completedAt: "2025-02-18T08:53:51.205Z"
             };
         } else {
             return error("Unable to infer object type from: " + fromObjectType);
@@ -175,46 +174,46 @@ http:Service mockService = service object {
     # http:DefaultStatusCodeResponse (An error occurred.)
     resource function post associations/[string fromObjectType]/[string toObjectType]/batch/read(@http:Payload BatchInputPublicFetchAssociationsBatchRequest payload) returns BatchResponsePublicAssociationMultiWithLabel|error {
         return {
-            "status": "COMPLETE",
-            "results": [
+            status: "COMPLETE",
+            results: [
                 {
-                    "from": {"id": "41479955131"},
-                    "to": [
+                    'from: {id: "41479955131"},
+                    to: [
                         {
-                            "toObjectId": 38056537805,
-                            "associationTypes": [
+                            toObjectId: 38056537805,
+                            associationTypes: [
                                 {
-                                    "category": "HUBSPOT_DEFINED",
-                                    "typeId": 341,
-                                    "label": null
+                                    category: "HUBSPOT_DEFINED",
+                                    typeId: 341,
+                                    label: null
                                 },
                                 {
-                                    "category": "HUBSPOT_DEFINED",
-                                    "typeId": 5,
-                                    "label": "Primary"
+                                    category: "HUBSPOT_DEFINED",
+                                    typeId: 5,
+                                    label: "Primary"
                                 }
                             ]
                         },
                         {
-                            "toObjectId": 38056537829,
-                            "associationTypes": [
+                            toObjectId: 38056537829,
+                            associationTypes: [
                                 {
-                                    "category": "HUBSPOT_DEFINED",
-                                    "typeId": 341,
-                                    "label": null
+                                    category: "HUBSPOT_DEFINED",
+                                    typeId: 341,
+                                    label: null
                                 },
                                 {
-                                    "category": "USER_DEFINED",
-                                    "typeId": 9,
-                                    "label": "d->c"
+                                    category: "USER_DEFINED",
+                                    typeId: 9,
+                                    label: "d->c"
                                 }
                             ]
                         }
                     ]
                 }
             ],
-            "startedAt": "2025-02-17T11:08:16.755Z",
-            "completedAt": "2025-02-17T11:08:16.767Z"
+            startedAt: "2025-02-17T11:08:16.755Z",
+            completedAt: "2025-02-17T11:08:16.767Z"
         };
     }
 
@@ -226,14 +225,13 @@ http:Service mockService = service object {
     # http:DefaultStatusCodeResponse (An error occurred.)
     resource function post associations/usage/high\-usage\-report/[int:Signed32 userId]() returns ReportCreationResponse|error {
         return {
-            "enqueueTime":
-            {
-                "value": 1739687932759,
-                "dateOnly": false,
-                "timeZoneShift": 0
+            enqueueTime: {
+                value: 1739687932759,
+                dateOnly: false,
+                timeZoneShift: 0
             },
-            "userId": userId,
-            "userEmail": "deltaxb21@gmail.com"
+            userId: userId,
+            userEmail: "deltaxb21@gmail.com"
         };
     }
 
@@ -244,27 +242,27 @@ http:Service mockService = service object {
     # http:DefaultStatusCodeResponse (An error occurred.)
     resource function put objects/[string fromObjectType]/[string fromObjectId]/associations/default/[string toObjectType]/[string toObjectId]() returns BatchResponsePublicDefaultAssociation|error {
         return {
-            "status": "COMPLETE",
-            "results": [
+            status: "COMPLETE",
+            results: [
                 {
-                    "from": {"id": "41479955131"},
-                    "to": {"id": "38056537829"},
-                    "associationSpec": {
-                        "associationCategory": "HUBSPOT_DEFINED",
-                        "associationTypeId": 341
+                    'from: {id: "41479955131"},
+                    to: {id: "38056537829"},
+                    associationSpec: {
+                        associationCategory: "HUBSPOT_DEFINED",
+                        associationTypeId: 341
                     }
                 },
                 {
-                    "from": {"id": "38056537829"},
-                    "to": {"id": "41479955131"},
-                    "associationSpec": {
-                        "associationCategory": "HUBSPOT_DEFINED",
-                        "associationTypeId": 342
+                    'from: {id: "38056537829"},
+                    to: {id: "41479955131"},
+                    associationSpec: {
+                        associationCategory: "HUBSPOT_DEFINED",
+                        associationTypeId: 342
                     }
                 }
             ],
-            "startedAt": "2025-02-17T12:01:32.039Z",
-            "completedAt": "2025-02-17T12:01:32.070Z"
+            startedAt: "2025-02-17T12:01:32.039Z",
+            completedAt: "2025-02-17T12:01:32.070Z"
         };
     }
 
@@ -275,11 +273,11 @@ http:Service mockService = service object {
     # http:DefaultStatusCodeResponse (An error occurred.)
     resource function put objects/[string objectType]/[string objectId]/associations/[string toObjectType]/[string toObjectId](@http:Payload AssociationSpec[] payload) returns LabelsBetweenObjectPair|error {
         return {
-            "fromObjectTypeId": "0-3",
-            "fromObjectId": 41479955131,
-            "toObjectTypeId": "0-2",
-            "toObjectId": 38056537829,
-            "labels": ["d->c"]
+            fromObjectTypeId: "0-3",
+            fromObjectId: 41479955131,
+            toObjectTypeId: "0-2",
+            toObjectId: 38056537829,
+            labels: ["d->c"]
         };
     }
 };
