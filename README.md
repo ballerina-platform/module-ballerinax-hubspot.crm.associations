@@ -12,10 +12,6 @@
 
 The `ballerinax/hubspot.crm.associations` offers APIs to connect and interact with the [HubSpot Association Details API](https://developers.hubspot.com/docs/reference/api/crm/associations/association-details) endpoints, specifically based on the [HubSpot REST API](https://developers.hubspot.com/docs/reference/api).
 
-> **Note:** This package may be changed in the future based on the HubSpot API changes, since it is currently under development and is subject to change based on testing and feedback. By using this package, you are agreeing to accept any future changes that might occur and understand the risk associated with testing an unstable API. Refer to the [HubSpot Developer Terms](https://legal.hubspot.com/developer-terms) & [Developer Beta Terms](https://legal.hubspot.com/developerbetaterms) for more information.
->
-> The feedback submissions endpoints are currently read only. Feedback submissions cannot be submitted or edited through the API.
-
 ## Setup guide
 
 To use the HubSpot Association details connector, you must have access to the HubSpot API through a HubSpot developer account and a HubSpot App under it. Therefore you need to register for a developer account at HubSpot if you don't have one already.
@@ -184,7 +180,7 @@ import ballerina/oauth2;
     configurable string clientSecret = ?;
     configurable string refreshToken = ?;
 
-    hsfeedback:ConnectionConfig config = {
+    hsassociations:ConnectionConfig config = {
         auth: {
             clientId,
             clientSecret,
@@ -199,11 +195,12 @@ import ballerina/oauth2;
 
 Now, utilize the available connector operations. A sample usecase is shown below.
 
-#### Get list all associations of an object by object type
+#### Get list all associations of an object by object type and object id
     
 ```ballerina
 public function main() returns error? {
-
+    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse 
+    = check hubspotAssociations->/objects/["deals"]/["41479955131"]/associations/["companies"].get();
 }
 ```
 
@@ -211,7 +208,8 @@ public function main() returns error? {
 
 The `HubSpot CRM Associations` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/module-ballerinax-hubspot.crm.associations/tree/main/examples/), covering the following use cases:
 
-[//]: # (TODO: Add examples)
+1. [Create and Read Associations](./examples/create_read_associations) - This example demonstrates the usage of the HubSpot CRM Associations connector to create default and custom associations between deals and companies, as well as retrieve existing associations for a given deal.
+
 
 ## Build from the source
 
