@@ -254,7 +254,7 @@ isolated function testCreateCustomAssociationByInvalidObjectType() returns error
     groups: ["live_tests", "mock_tests"]
 }
 isolated function testDeleteSpecificLablesByInvalidObjectType() returns error? {
-    http:Response|error response = hubspotAssociations->/associations/["dea"]/["com"]/batch/labels/archive.post(
+    http:Response response = check hubspotAssociations->/associations/["dea"]/["com"]/batch/labels/archive.post(
         payload = {
             inputs: [
                 {
@@ -270,28 +270,24 @@ isolated function testDeleteSpecificLablesByInvalidObjectType() returns error? {
             ]
         }
     );
-    if response is http:Response {
-        test:assertEquals(response.statusCode, 400,
-                msg = string `Expected status code 400 but got ${response.statusCode}`);
-    }
+    test:assertEquals(response.statusCode, 400,
+            msg = string `Expected status code 400 but got ${response.statusCode}`);
 }
 
 @test:Config {
     groups: ["live_tests", "mock_tests"]
 }
 isolated function testDeleteAllAssociationsByInvalidObjectType() returns error? {
-    http:Response|error response = hubspotAssociations->/objects/["com"]/["38056537829"]/associations/["dea"]/["41479955131"].delete();
-    if response is http:Response {
-        test:assertEquals(response.statusCode, 400,
-                msg = string `Expected status code 400 but got ${response.statusCode}`);
-    }
+    http:Response response = check hubspotAssociations->/objects/["com"]/["38056537829"]/associations/["dea"]/["41479955131"].delete();
+    test:assertEquals(response.statusCode, 400,
+            msg = string `Expected status code 400 but got ${response.statusCode}`);
 }
 
 @test:Config {
     groups: ["live_tests", "mock_tests"]
 }
 isolated function testRemoveAssociationBetweenObjectByInvalidObjectType() returns error? {
-    http:Response|error response = hubspotAssociations->/associations/["dea"]/["com"]/batch/archive.post(
+    http:Response response = check hubspotAssociations->/associations/["dea"]/["com"]/batch/archive.post(
         payload = {
             inputs: [
                 {
@@ -305,8 +301,6 @@ isolated function testRemoveAssociationBetweenObjectByInvalidObjectType() return
             ]
         }
     );
-    if response is http:Response {
         test:assertEquals(response.statusCode, 400,
                 msg = string `Expected status code 400 but got ${response.statusCode}`);
-    }
 }
