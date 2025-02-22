@@ -49,6 +49,8 @@ final string mockToObjectType = "companies";
 final string mockFromObjectId = "41479955131";
 final string mockToObjectId = "38056537829";
 final int:Signed32 mockUserId = 77406593;
+final string mockInvalidFromObjectType = "dea";
+final string mockInvalidToObjectType = "com";
 
 @test:Config {
     groups: ["live_tests", "mock_tests"]
@@ -206,7 +208,7 @@ isolated function testDeleteAllAssociations() returns error? {
     groups: ["live_tests", "mock_tests"]
 }
 isolated function testGetAssociationsListByInvalidObjectType() returns error? {
-    CollectionResponseMultiAssociatedObjectWithLabelForwardPaging|error response = hubspotAssociations->/objects/["dea"]/[mockFromObjectId]/associations/invalidObjectType.get();
+    CollectionResponseMultiAssociatedObjectWithLabelForwardPaging|error response = hubspotAssociations->/objects/[mockInvalidFromObjectType]/[mockFromObjectId]/associations/invalidObjectType.get();
     test:assertTrue(response is error, msg = "Expected an error response, but got a successful response.");
 }
 
@@ -214,7 +216,7 @@ isolated function testGetAssociationsListByInvalidObjectType() returns error? {
     groups: ["live_tests", "mock_tests"]
 }
 isolated function testCreateDefaultAssociationByInvalidObjectType() returns error? {
-    BatchResponsePublicDefaultAssociation|error response = hubspotAssociations->/associations/["dea"]/["com"]/batch/associate/default.post(
+    BatchResponsePublicDefaultAssociation|error response = hubspotAssociations->/associations/[mockInvalidFromObjectType]/[mockInvalidToObjectType]/batch/associate/default.post(
         payload = {
             inputs: [
                 {
@@ -231,7 +233,7 @@ isolated function testCreateDefaultAssociationByInvalidObjectType() returns erro
     groups: ["live_tests", "mock_tests"]
 }
 isolated function testCreateCustomAssociationByInvalidObjectType() returns error? {
-    BatchResponseLabelsBetweenObjectPair|BatchResponseLabelsBetweenObjectPairWithErrors|error response = hubspotAssociations->/associations/["dea"]/["com"]/batch/create.post(
+    BatchResponseLabelsBetweenObjectPair|BatchResponseLabelsBetweenObjectPairWithErrors|error response = hubspotAssociations->/associations/[mockInvalidFromObjectType]/[mockInvalidToObjectType]/batch/create.post(
         payload = {
             inputs: [
                 {
@@ -254,7 +256,7 @@ isolated function testCreateCustomAssociationByInvalidObjectType() returns error
     groups: ["live_tests", "mock_tests"]
 }
 isolated function testDeleteSpecificLablesByInvalidObjectType() returns error? {
-    http:Response response = check hubspotAssociations->/associations/["dea"]/["com"]/batch/labels/archive.post(
+    http:Response response = check hubspotAssociations->/associations/[mockInvalidFromObjectType]/[mockInvalidToObjectType]/batch/labels/archive.post(
         payload = {
             inputs: [
                 {
@@ -278,7 +280,7 @@ isolated function testDeleteSpecificLablesByInvalidObjectType() returns error? {
     groups: ["live_tests", "mock_tests"]
 }
 isolated function testDeleteAllAssociationsByInvalidObjectType() returns error? {
-    http:Response response = check hubspotAssociations->/objects/["com"]/["38056537829"]/associations/["dea"]/["41479955131"].delete();
+    http:Response response = check hubspotAssociations->/objects/[mockInvalidFromObjectType]/[mockFromObjectId]/associations/[mockInvalidToObjectType]/[mockToObjectId].delete();
     test:assertEquals(response.statusCode, 400,
             msg = string `Expected status code 400 but got ${response.statusCode}`);
 }
@@ -287,7 +289,7 @@ isolated function testDeleteAllAssociationsByInvalidObjectType() returns error? 
     groups: ["live_tests", "mock_tests"]
 }
 isolated function testRemoveAssociationBetweenObjectByInvalidObjectType() returns error? {
-    http:Response response = check hubspotAssociations->/associations/["dea"]/["com"]/batch/archive.post(
+    http:Response response = check hubspotAssociations->/associations/[mockInvalidToObjectType]/[mockInvalidFromObjectType]/batch/archive.post(
         payload = {
             inputs: [
                 {
@@ -301,6 +303,6 @@ isolated function testRemoveAssociationBetweenObjectByInvalidObjectType() return
             ]
         }
     );
-        test:assertEquals(response.statusCode, 400,
-                msg = string `Expected status code 400 but got ${response.statusCode}`);
+    test:assertEquals(response.statusCode, 400,
+            msg = string `Expected status code 400 but got ${response.statusCode}`);
 }
