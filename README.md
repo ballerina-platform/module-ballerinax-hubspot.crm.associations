@@ -16,11 +16,11 @@ The `ballerinax/hubspot.crm.associations` offers APIs to connect and interact wi
 
 To use the HubSpot Association details connector, you must have access to the HubSpot API through a HubSpot developer account and a HubSpot App under it. Therefore you need to register for a developer account at HubSpot if you don't have one already.
 
-### Step 1: Create/Login to a HubSpot Developer Account
-
-If you have an account already, go to the [HubSpot developer portal](https://app.hubspot.com/)
+### Step 1: Login to the HubSpot developer account
 
 If you don't have a HubSpot Developer Account you can sign up to a free account [here](https://developers.hubspot.com/get-started)
+
+If you have an account already, go to the [HubSpot developer portal](https://app.hubspot.com/)
 
 ### Step 2 (Optional): Create a Developer Test Account
 
