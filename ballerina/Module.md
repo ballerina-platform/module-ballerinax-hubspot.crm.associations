@@ -14,7 +14,7 @@ If you don't have a HubSpot Developer Account you can sign up to a free account 
 
 If you have an account already, go to the [HubSpot developer portal](https://app.hubspot.com/)
 
-### Step 2 (Optional): Create a Developer Test Account
+### Step 2: Create a Developer Test Account (Optional)
 
 Within app developer accounts, you can create a [developer test account](https://developers.hubspot.com/beta-docs/getting-started/account-types#developer-test-accounts) under your account to test apps and integrations without affecting any real HubSpot data.
 
@@ -31,7 +31,7 @@ Within app developer accounts, you can create a [developer test account](https:/
    You will see the newly created test account in the list of test accounts.
    ![Test account portal](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/main/docs/resources/test_account_portal.png)
 
-   ### Step 3: Create a HubSpot App
+### Step 3: Create a HubSpot App
 
 1. Now navigate to the `Apps` section from the left sidebar and click on the `Create app` button on the top right corner.
    ![Create app](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/main/docs/resources/create_app.png)
@@ -39,7 +39,7 @@ Within app developer accounts, you can create a [developer test account](https:/
 2. Provide a public app name and description for your app.
    ![App name and description](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/main/docs/resources/app_name_desc.png)
 
- ### Step 4: Setup Authentication
+### Step 4: Setup Authentication
 
 1. Move to the `Auth` tab.
    ![Configure authentication](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/main/docs/resources/config_auth.png)
@@ -202,4 +202,4 @@ public function main() returns error? {
 
 The `HubSpot CRM Associations` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/module-ballerinax-hubspot.crm.associations/tree/main/examples/), covering the following use cases:
 
-1. [Create and Read Associations](../examples/create_read_associations) - This example demonstrates the usage of the HubSpot CRM Associations connector to create default and custom associations between deals and companies, as well as retrieve existing associations for a given deal.
+1. [Create and Read Associations](https://github.com/module-ballerinax-hubspot.crm.associations/tree/main/examples/create_read_associations) - This example demonstrates the usage of the HubSpot CRM Associations connector to create default and custom associations between deals and companies, as well as retrieve existing associations for a given deal.
