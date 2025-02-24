@@ -19,9 +19,9 @@ import ballerina/io;
 import ballerina/oauth2;
 import ballerinax/hubspot.crm.associations as hsassociations;
 
-configurable string clientId = ?;
-configurable string clientSecret = ?;
-configurable string refreshToken = ?;
+configurable string clientId = "client_id";
+configurable string clientSecret = "client_secret";
+configurable string refreshToken = "refresh_token";
 
 hsassociations:ConnectionConfig config = {
     auth: {
@@ -32,12 +32,12 @@ hsassociations:ConnectionConfig config = {
     }
 };
 
-final hsassociations:Client hubspotAssociations = check new (config);
+final hsassociations:Client hubspot = check new (config);
 
 public function main() returns error? {
 
     // create default association between deals and companies
-    hsassociations:BatchResponsePublicDefaultAssociation createDefaultResponse = check hubspotAssociations->/associations/["deals"]/["companies"]/batch/associate/default.post(
+    hsassociations:BatchResponsePublicDefaultAssociation createDefaultResponse = check hubspot->/associations/["deals"]/["companies"]/batch/associate/default.post(
         payload = {
             inputs: [
                 {
@@ -51,7 +51,7 @@ public function main() returns error? {
     io:println("\nCreate default associations response : \n",createDefaultResponse.toJson());
 
     // create custom asspcoation between deals and companies
-    hsassociations:BatchResponseLabelsBetweenObjectPair createCustomResponse = check hubspotAssociations->/associations/["deals"]/["companies"]/batch/create.post(
+    hsassociations:BatchResponseLabelsBetweenObjectPair createCustomResponse = check hubspot->/associations/["deals"]/["companies"]/batch/create.post(
         payload = {inputs: [
             {
                 'from: {id: "41479955131"},
@@ -69,7 +69,7 @@ public function main() returns error? {
     io:println("\nCreate custom associations response : \n",createCustomResponse.toJson());
 
     // read associations of a deal
-    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse = check hubspotAssociations->/objects/["deals"]/["41479955131"]/associations/["companies"].get();
+    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse = check hubspot->/objects/["deals"]/["41479955131"]/associations/["companies"].get();
 
     io:println("\nAll created associations for deals(41479955131) with companies response : \n",readResponse);
 }
