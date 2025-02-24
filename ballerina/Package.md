@@ -14,7 +14,7 @@ If you don't have a HubSpot Developer Account you can sign up to a free account 
 
 If you have an account already, go to the [HubSpot developer portal](https://app.hubspot.com/)
 
-### Step 2: Create a Developer Test Account (Optional)
+### Step 2: Create a developer test account (Optional)
 
 Within app developer accounts, you can create a [developer test account](https://developers.hubspot.com/beta-docs/getting-started/account-types#developer-test-accounts) under your account to test apps and integrations without affecting any real HubSpot data.
 
@@ -31,7 +31,7 @@ Within app developer accounts, you can create a [developer test account](https:/
    You will see the newly created test account in the list of test accounts.
    ![Test account portal](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/main/docs/resources/test_account_portal.png)
 
-### Step 3: Create a HubSpot App
+### Step 3: Create a HubSpot app
 
 1. Now navigate to the `Apps` section from the left sidebar and click on the `Create app` button on the top right corner.
    ![Create app](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/main/docs/resources/create_app.png)
@@ -39,7 +39,7 @@ Within app developer accounts, you can create a [developer test account](https:/
 2. Provide a public app name and description for your app.
    ![App name and description](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/main/docs/resources/app_name_desc.png)
 
-### Step 4: Setup Authentication
+### Step 4: Setup authentication
 
 1. Move to the `Auth` tab.
    ![Configure authentication](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/main/docs/resources/config_auth.png)
@@ -90,12 +90,12 @@ Within app developer accounts, you can create a [developer test account](https:/
 
    ![Redirect URL](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/main/docs/resources/redirect_url.png)
   
-### Step 5: Get the Client ID and Client Secret
+### Step 5: Get the client ID and client secret
 
 Navigate to the `Auth` tab and you will see the `Client ID` and `Client Secret` for your app. Make sure to save these values.
 ![Client ID and Client Secret](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/main/docs/resources/client_id_secret.png)
 
-### Step 6: Setup Authentication Flow
+### Step 6: Setup authentication flow
 
 Before proceeding with the Quickstart, ensure you have obtained the Access Token or Refresh Token using the following steps:
 
