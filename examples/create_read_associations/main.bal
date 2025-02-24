@@ -14,7 +14,6 @@
 // specific language governing permissions and limitations
 // under the License.
 
-// import ballerina/http;
 import ballerina/io;
 import ballerina/oauth2;
 import ballerinax/hubspot.crm.associations as hsassociations;
