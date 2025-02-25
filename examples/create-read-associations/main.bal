@@ -47,28 +47,30 @@ public function main() returns error? {
         }
     );
 
-    io:println("\nCreate default associations response : \n",createDefaultResponse.toJson());
+    io:println("\nCreate default associations response : \n", createDefaultResponse.toJson());
 
     // create custom asspcoation between deals and companies
     hsassociations:BatchResponseLabelsBetweenObjectPair createCustomResponse = check hubspot->/associations/["deals"]/["companies"]/batch/create.post(
-        payload = {inputs: [
-            {
-                'from: {id: "41479955131"},
-                to: {id: "38056537805"},
-                types: [
-                    {
-                        associationCategory: "USER_DEFINED",
-                        associationTypeId: 9
-                    }
-                ]
-            }
-        ]}
+        payload = {
+            inputs: [
+                {
+                    'from: {id: "41479955131"},
+                    to: {id: "38056537805"},
+                    types: [
+                        {
+                            associationCategory: "USER_DEFINED",
+                            associationTypeId: 9
+                        }
+                    ]
+                }
+            ]
+        }
     );
 
-    io:println("\nCreate custom associations response : \n",createCustomResponse.toJson());
+    io:println("\nCreate custom associations response : \n", createCustomResponse.toJson());
 
     // read associations of a deal
     hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse = check hubspot->/objects/["deals"]/["41479955131"]/associations/["companies"].get();
 
-    io:println("\nAll created associations for deals(41479955131) with companies response : \n",readResponse);
+    io:println("\nAll created associations for deals(41479955131) with companies response : \n", readResponse);
 }
