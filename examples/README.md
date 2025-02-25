@@ -2,7 +2,7 @@
 
 The `ballerinax/hubspot.crm.associations` connector provides practical examples illustrating usage in various scenarios.
 
-1. [Create and read associations](../examples/create-read-associations) - This example demonstrates the usage of the HubSpot CRM Associations connector to create default and custom associations between deals and companies, as well as retrieve existing associations for a given deal.
+1. [Create and read associations](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/tree/main/examples/create-read-associations) - This example demonstrates the usage of the HubSpot CRM Associations connector to create default and custom associations between deals and companies, as well as retrieve existing associations for a given deal.
 
 ## Prerequisites
 
