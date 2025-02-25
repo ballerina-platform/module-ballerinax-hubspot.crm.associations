@@ -206,9 +206,9 @@ public function main() returns error? {
 
 ## Examples
 
-The `HubSpot CRM Associations` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/module-ballerinax-hubspot.crm.associations/tree/main/examples/), covering the following use cases:
+The `HubSpot CRM Associations` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/tree/main/examples/), covering the following use cases:
 
-1. [Create and Read Associations](https://github.com/module-ballerinax-hubspot.crm.associations/tree/main/examples/create_read_associations) - This example demonstrates the usage of the HubSpot CRM Associations connector to create default and custom associations between deals and companies, as well as retrieve existing associations for a given deal.
+1. [Create and read associations](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/tree/main/examples/create-read-associations) - This example demonstrates the usage of the HubSpot CRM Associations connector to create default and custom associations between deals and companies, as well as retrieve existing associations for a given deal.
 
 ## Build from the source
 
