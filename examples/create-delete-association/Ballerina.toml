@@ -1,6 +1,6 @@
 [package]
-org = "wso2"
-name = "create_read_associations"
+org = "aruna_priyadarshana"
+name = "create_delete_association"
 version = "0.1.0"
 distribution = "2201.11.0"
 
