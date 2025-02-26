@@ -38,17 +38,16 @@ const string mockFromObjectType = "deals";
 const string mockToObjectType = "companies";
 const string mockFromObjectId1 = "46989749974";
 const string mockToObjectId1 = "43500581578";
-const string mockFromObjectId2 = "46989749975";
-const string mockToObjectId2 = "43626089171";
 
 public function main() returns error? {
+
     // create individual default association between deals and companies
     hsassociations:BatchResponsePublicDefaultAssociation createDefaultResponse = check hubspot->/objects/[mockFromObjectType]/[mockFromObjectId1]/associations/default/[mockToObjectType]/[mockToObjectId1].put();
 
     io:println("\nCreate individual default association between deals and companies response : \n", createDefaultResponse);
 
     // create individual association with label between deals and companies
-    hsassociations:LabelsBetweenObjectPair createLabelResponse = check hubspot->/objects/[mockFromObjectType]/[mockFromObjectId2]/associations/[mockToObjectType]/[mockToObjectId2].put(
+    hsassociations:LabelsBetweenObjectPair createLabelResponse = check hubspot->/objects/[mockFromObjectType]/[mockFromObjectId1]/associations/[mockToObjectType]/[mockToObjectId1].put(
         payload = [{
                 associationCategory: "USER_DEFINED",
                 associationTypeId: 3
