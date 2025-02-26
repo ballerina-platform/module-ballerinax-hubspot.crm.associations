@@ -6,16 +6,16 @@ The `ballerinax/hubspot.crm.associations` connector provides practical examples 
 
 ## Prerequisites
 
-- **Ballerina:** Download and install Ballerina from [here](https://ballerina.io/downloads/).
-- **HubSpot developer account:** Create a HubSpot developer account and create an app to obtain the necessary credentials. Refer to the [Setup Guide](../ballerina/Package.md) for instructions.
-- **`ballerinax/hubspot.crm.association` module:** Import the `ballerinax/hubspot.crm.association` module into your Ballerina project and configure it with the obtained credentials. Refer to the following code for creating the `Config.toml` file.
+- Ballerina Swan Lake Update 11 (2201.11.0)
+- A HubSpot developer account (Refer to the [Setup Guide](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/blob/main/ballerina/Readme.md#setup-guide)) for instructions.
+- `ballerinax/hubspot.crm.association` module
+-Refer to the following code for creating the `Config.toml` file.
 
 ```toml  
     clientId = <Client Id>
     clientSecret = <Client Secret>
     refreshToken = <Refresh Token>
 ``` 
-  
 
 ## Running an example
 
