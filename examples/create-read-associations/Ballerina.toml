@@ -1,5 +1,5 @@
 [package]
-org = "aruna"
+org = "wso2"
 name = "create_read_associations"
 version = "0.1.0"
 distribution = "2201.11.0"
