@@ -18,9 +18,9 @@ import ballerina/io;
 import ballerina/oauth2;
 import ballerinax/hubspot.crm.associations as hsassociations;
 
-configurable string clientId = "client_id";
-configurable string clientSecret = "client_secret";
-configurable string refreshToken = "refresh_token";
+configurable string clientId = ?;
+configurable string clientSecret = ?;
+configurable string refreshToken = ?;
 
 hsassociations:ConnectionConfig config = {
     auth: {
@@ -33,33 +33,46 @@ hsassociations:ConnectionConfig config = {
 
 final hsassociations:Client hubspot = check new (config);
 
+const string mockFromObjectType = "deals";
+const string mockToObjectType = "companies";
+const string mockFromObjectId = "46989749974";
+const string mockToObjectId = "43500581578";
+
 public function main() returns error? {
 
     // create default association between deals and companies
-    hsassociations:BatchResponsePublicDefaultAssociation createDefaultResponse = check hubspot->/associations/["deals"]/["companies"]/batch/associate/default.post(
+    hsassociations:BatchResponsePublicDefaultAssociation createDefaultResponse = check hubspot->/associations/[mockFromObjectType]/[mockToObjectType]/batch/associate/default.post(
         payload = {
             inputs: [
                 {
-                    'from: {id: "41479955131"},
-                    to: {id: "38056537829"}
+                    'from: {
+                        id: mockFromObjectId
+                    },
+                    to: {
+                        id: mockToObjectId
+                    }
                 }
             ]
         }
     );
 
-    io:println("\nCreate default associations response : \n", createDefaultResponse.toJson());
+    io:println("\nCreate default associations response : \n", createDefaultResponse);
 
-    // create custom asspcoation between deals and companies
-    hsassociations:BatchResponseLabelsBetweenObjectPair createCustomResponse = check hubspot->/associations/["deals"]/["companies"]/batch/create.post(
+    // create custom association between deals and companies
+    hsassociations:BatchResponseLabelsBetweenObjectPair createCustomResponse = check hubspot->/associations/[mockFromObjectType]/[mockToObjectType]/batch/create.post(
         payload = {
             inputs: [
                 {
-                    'from: {id: "41479955131"},
-                    to: {id: "38056537805"},
+                    'from: {
+                        id: mockFromObjectId
+                    },
+                    to: {
+                        id: mockToObjectId
+                    },
                     types: [
                         {
                             associationCategory: "USER_DEFINED",
-                            associationTypeId: 9
+                            associationTypeId: 1
                         }
                     ]
                 }
@@ -67,10 +80,10 @@ public function main() returns error? {
         }
     );
 
-    io:println("\nCreate custom associations response : \n", createCustomResponse.toJson());
+    io:println("\nCreate custom associations response : \n", createCustomResponse);
 
     // read associations of a deal
-    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse = check hubspot->/objects/["deals"]/["41479955131"]/associations/["companies"].get();
+    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse = check hubspot->/objects/[mockFromObjectType]/[mockFromObjectId]/associations/[mockToObjectType].get();
 
-    io:println("\nAll created associations for deals(41479955131) with companies response : \n", readResponse);
+    io:println(string `\nAll created associations for deals(${mockFromObjectId}) with companies response : \n`, readResponse);
 }
