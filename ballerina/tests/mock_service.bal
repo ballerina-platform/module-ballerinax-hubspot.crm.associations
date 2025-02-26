@@ -177,7 +177,9 @@ http:Service mockService = service object {
             status: "COMPLETE",
             results: [
                 {
-                    'from: {id: "46989749974"},
+                    'from: {
+                        id: "46989749974"
+                    },
                     to: [
                         {
                             toObjectId: 43500581578,
@@ -245,16 +247,24 @@ http:Service mockService = service object {
             status: "COMPLETE",
             results: [
                 {
-                    'from: {id: "46989749974"},
-                    to: {id: "43500581578"},
+                    'from: {
+                        id: "46989749974"
+                    },
+                    to: {
+                        id: "43500581578"
+                    },
                     associationSpec: {
                         associationCategory: "HUBSPOT_DEFINED",
                         associationTypeId: 341
                     }
                 },
                 {
-                    'from: {id: "38056537829"},
-                    to: {id: "41479955131"},
+                    'from: {
+                        id: "38056537829"
+                    },
+                    to: {
+                        id: "41479955131"
+                    },
                     associationSpec: {
                         associationCategory: "HUBSPOT_DEFINED",
                         associationTypeId: 342

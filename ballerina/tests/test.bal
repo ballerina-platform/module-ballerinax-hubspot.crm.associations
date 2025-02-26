@@ -324,7 +324,9 @@ isolated function testRemoveAssociationBetweenObjectByInvalidObjectType() return
         payload = {
             inputs: [
                 {
-                    'from: {id: mockFromObjectId},
+                    'from: {
+                        id: mockFromObjectId
+                    },
                     to: [
                         {
                             id: mockToObjectId
