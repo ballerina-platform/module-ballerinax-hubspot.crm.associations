@@ -46,14 +46,15 @@ isolated function initClient() returns Client|error {
 
 final string mockFromObjectType = "deals";
 final string mockToObjectType = "companies";
-final string mockFromObjectId = "41479955131";
-final string mockToObjectId = "38056537829";
-final int:Signed32 mockUserId = 77406593;
+final string mockFromObjectId = "46989749974";
+final string mockToObjectId = "43500581578";
+final int:Signed32 mockUserId = 77406147;
 final string mockInvalidFromObjectType = "dea";
 final string mockInvalidToObjectType = "com";
 
 @test:Config {
-    groups: ["live_tests", "mock_tests"]
+    groups: ["live_tests", "mock_tests"],
+    dependsOn: [testCreateAssociationLabel, testCreateDefaultAssociation, testCreateCustomAssociation, testCreateDefaultAssociationType]
 }
 isolated function testGetAssociationsList() returns error? {
     CollectionResponseMultiAssociatedObjectWithLabelForwardPaging response = check hubspotAssociations->/objects/[mockFromObjectType]/[mockFromObjectId]/associations/[mockToObjectType].get();
@@ -88,7 +89,7 @@ isolated function testCreateCustomAssociation() returns error? {
                     types: [
                         {
                             associationCategory: "USER_DEFINED",
-                            associationTypeId: 9
+                            associationTypeId: 1
                         }
                     ],
                     'from: {id: mockFromObjectId},
@@ -102,7 +103,8 @@ isolated function testCreateCustomAssociation() returns error? {
 }
 
 @test:Config {
-    groups: ["live_tests", "mock_tests"]
+    groups: ["live_tests", "mock_tests"],
+    dependsOn: [testCreateAssociationLabel, testCreateDefaultAssociation, testCreateCustomAssociation, testCreateDefaultAssociationType]
 }
 isolated function testReadAssociation() returns error? {
     BatchResponsePublicAssociationMultiWithLabel response = check hubspotAssociations->/associations/[mockFromObjectType]/[mockToObjectType]/batch/read.post(
@@ -141,7 +143,7 @@ isolated function testCreateAssociationLabel() returns error? {
         [
             {
                 "associationCategory": "USER_DEFINED",
-                "associationTypeId": 9
+                "associationTypeId": 1
             }
         ]
     );
@@ -150,7 +152,8 @@ isolated function testCreateAssociationLabel() returns error? {
 }
 
 @test:Config {
-    groups: ["live_tests", "mock_tests"]
+    groups: ["live_tests", "mock_tests"],
+    dependsOn: [testGetAssociationsList, testReadAssociation]
 }
 isolated function testRemoveAssociationBetweenObject() returns error? {
     http:Response response = check hubspotAssociations->/associations/[mockFromObjectType]/[mockToObjectType]/batch/archive.post(
@@ -172,7 +175,8 @@ isolated function testRemoveAssociationBetweenObject() returns error? {
 }
 
 @test:Config {
-    groups: ["live_tests", "mock_tests"]
+    groups: ["live_tests", "mock_tests"],
+    dependsOn: [testGetAssociationsList, testReadAssociation]
 }
 isolated function testDeleteSpecificLables() returns error? {
     http:Response response = check hubspotAssociations->/associations/[mockFromObjectType]/[mockToObjectType]/batch/labels/archive.post(
@@ -182,7 +186,7 @@ isolated function testDeleteSpecificLables() returns error? {
                     types: [
                         {
                             associationCategory: "HUBSPOT_DEFINED",
-                            associationTypeId: 9
+                            associationTypeId: 1
                         }
                     ],
                     'from: {id: mockFromObjectId},
@@ -196,7 +200,8 @@ isolated function testDeleteSpecificLables() returns error? {
 }
 
 @test:Config {
-    groups: ["live_tests", "mock_tests"]
+    groups: ["live_tests", "mock_tests"],
+    dependsOn: [testGetAssociationsList, testReadAssociation]
 }
 isolated function testDeleteAllAssociations() returns error? {
     http:Response response = check hubspotAssociations->/objects/[mockToObjectType]/[mockToObjectId]/associations/[mockFromObjectType]/[mockFromObjectId].delete();
@@ -262,7 +267,7 @@ isolated function testDeleteSpecificLablesByInvalidObjectType() returns error? {
                 {
                     types: [
                         {
-                            associationCategory: "HUBSPOT_DEFINED",
+                            associationCategory: "USER_DEFINED",
                             associationTypeId: 9
                         }
                     ],
