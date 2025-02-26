@@ -8,20 +8,6 @@ dependencies-toml-version = "2"
 distribution-version = "2201.11.0"
 
 [[package]]
-org = "aruna"
-name = "create_read_associations"
-version = "0.1.0"
-dependencies = [
-	{org = "ballerina", name = "io"},
-	{org = "ballerina", name = "oauth2"},
-	{org = "ballerinai", name = "observe"},
-	{org = "ballerinax", name = "hubspot.crm.associations"}
-]
-modules = [
-	{org = "aruna", packageName = "create_read_associations", moduleName = "create_read_associations"}
-]
-
-[[package]]
 org = "ballerina"
 name = "auth"
 version = "2.13.0"
@@ -84,7 +70,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "http"
-version = "2.13.2"
+version = "2.13.3"
 dependencies = [
 	{org = "ballerina", name = "auth"},
 	{org = "ballerina", name = "cache"},
@@ -314,7 +300,6 @@ name = "hubspot.crm.associations"
 version = "1.0.0"
 dependencies = [
 	{org = "ballerina", name = "http"},
-	{org = "ballerina", name = "io"},
 	{org = "ballerina", name = "log"},
 	{org = "ballerina", name = "oauth2"},
 	{org = "ballerina", name = "url"},
@@ -322,5 +307,19 @@ dependencies = [
 ]
 modules = [
 	{org = "ballerinax", packageName = "hubspot.crm.associations", moduleName = "hubspot.crm.associations"}
+]
+
+[[package]]
+org = "wso2"
+name = "create_read_associations"
+version = "0.1.0"
+dependencies = [
+	{org = "ballerina", name = "io"},
+	{org = "ballerina", name = "oauth2"},
+	{org = "ballerinai", name = "observe"},
+	{org = "ballerinax", name = "hubspot.crm.associations"}
+]
+modules = [
+	{org = "wso2", packageName = "create_read_associations", moduleName = "create_read_associations"}
 ]
 
