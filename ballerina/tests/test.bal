@@ -44,13 +44,13 @@ isolated function initClient() returns Client|error {
     }, serviceUrl);
 }
 
-final string mockFromObjectType = "deals";
-final string mockToObjectType = "companies";
-final string mockFromObjectId = "46989749974";
-final string mockToObjectId = "43500581578";
-final int:Signed32 mockUserId = 77406147;
-final string mockInvalidFromObjectType = "dea";
-final string mockInvalidToObjectType = "com";
+const string mockFromObjectType = "deals";
+const string mockToObjectType = "companies";
+const string mockFromObjectId = "46989749974";
+const string mockToObjectId = "43500581578";
+const int:Signed32 mockUserId = 77406147;
+const string mockInvalidFromObjectType = "dea";
+const string mockInvalidToObjectType = "com";
 
 @test:Config {
     groups: ["live_tests", "mock_tests"],
@@ -69,8 +69,12 @@ isolated function testCreateDefaultAssociation() returns error? {
         payload = {
             inputs: [
                 {
-                    'from: {id: mockFromObjectId},
-                    to: {id: mockToObjectId}
+                    'from: {
+                        id: mockFromObjectId
+                    },
+                    to: {
+                        id: mockToObjectId
+                    }
                 }
             ]
         }
@@ -92,8 +96,12 @@ isolated function testCreateCustomAssociation() returns error? {
                             associationTypeId: 1
                         }
                     ],
-                    'from: {id: mockFromObjectId},
-                    to: {id: mockToObjectId}
+                    'from: {
+                        id: mockFromObjectId
+                    },
+                    to: {
+                        id: mockToObjectId
+                    }
                 }
             ]
         }
@@ -142,8 +150,8 @@ isolated function testCreateAssociationLabel() returns error? {
     LabelsBetweenObjectPair response = check hubspotAssociations->/objects/[mockFromObjectType]/[mockFromObjectId]/associations/[mockToObjectType]/[mockToObjectId].put(
         [
             {
-                "associationCategory": "USER_DEFINED",
-                "associationTypeId": 1
+                associationCategory: "USER_DEFINED",
+                associationTypeId: 1
             }
         ]
     );
@@ -160,7 +168,9 @@ isolated function testRemoveAssociationBetweenObject() returns error? {
         payload = {
             inputs: [
                 {
-                    'from: {id: mockFromObjectId},
+                    'from: {
+                        id: mockFromObjectId
+                    },
                     to: [
                         {
                             id: mockToObjectId
@@ -189,8 +199,12 @@ isolated function testDeleteSpecificLables() returns error? {
                             associationTypeId: 1
                         }
                     ],
-                    'from: {id: mockFromObjectId},
-                    to: {id: mockToObjectId}
+                    'from: {
+                        id: mockFromObjectId
+                    },
+                    to: {
+                        id: mockToObjectId
+                    }
                 }
             ]
         }
@@ -225,8 +239,12 @@ isolated function testCreateDefaultAssociationByInvalidObjectType() returns erro
         payload = {
             inputs: [
                 {
-                    'from: {id: mockFromObjectId},
-                    to: {id: mockToObjectId}
+                    'from: {
+                        id: mockFromObjectId
+                    },
+                    to: {
+                        id: mockToObjectId
+                    }
                 }
             ]
         }
@@ -248,8 +266,12 @@ isolated function testCreateCustomAssociationByInvalidObjectType() returns error
                             associationTypeId: 9
                         }
                     ],
-                    'from: {id: mockFromObjectId},
-                    to: {id: mockToObjectId}
+                    'from: {
+                        id: mockFromObjectId
+                    },
+                    to: {
+                        id: mockToObjectId
+                    }
                 }
             ]
         }
@@ -271,8 +293,12 @@ isolated function testDeleteSpecificLablesByInvalidObjectType() returns error? {
                             associationTypeId: 9
                         }
                     ],
-                    'from: {id: mockFromObjectId},
-                    to: {id: mockToObjectId}
+                    'from: {
+                        id: mockFromObjectId
+                    },
+                    to: {
+                        id: mockToObjectId
+                    }
                 }
             ]
         }
