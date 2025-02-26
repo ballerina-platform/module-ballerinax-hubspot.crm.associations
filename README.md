@@ -189,8 +189,9 @@ import ballerina/oauth2;
         }
     };
 
-    final hsassociations:Client baseClient = check new (config);
+    final hsassociations:Client hubspot = check new (config);
     ```
+    
 ### Step 3: Invoke the connector operation
 
 Now, utilize the available connector operations. A sample usecase is shown below.
@@ -200,7 +201,7 @@ Now, utilize the available connector operations. A sample usecase is shown below
 ```ballerina
 public function main() returns error? {
     hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse 
-    = check hubspotAssociations->/objects/["deals"]/["41479955131"]/associations/["companies"].get();
+    = check hubspot->/objects/["deals"]/["41479955131"]/associations/["companies"];
 }
 ```
 
