@@ -2,14 +2,14 @@
 
 The `ballerinax/hubspot.crm.associations` connector provides practical examples illustrating usage in various scenarios.
 
-1. [Create and read associations](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/tree/main/examples/create-read-associations) - This example demonstrates the usage of the HubSpot CRM Associations connector to create default and custom associations between deals and companies, as well as retrieve existing associations for a given deal.
+1. Create and read associations –  This example demonstrates how to use the HubSpot CRM Associations connector to batch-create default and custom-labeled associations between deals and companies, as well as retrieve existing associations for a given deal. Refer to this example [here](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/tree/main/examples/create-read-associations).
 
 ## Prerequisites
 
 - Ballerina Swan Lake Update 11 (2201.11.0)
 - A HubSpot developer account (Refer to the [Setup Guide](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/blob/main/ballerina/Readme.md#setup-guide)) for instructions.
 - `ballerinax/hubspot.crm.association` module
--Refer to the following code for creating the `Config.toml` file.
+- Refer to the following code for creating the `Config.toml` file.
 
 ```toml  
     clientId = <Client Id>
