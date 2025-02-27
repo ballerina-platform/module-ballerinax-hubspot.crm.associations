@@ -43,7 +43,7 @@ const string mockToObjectId2 = "43626089171";
 
 public function main() returns error? {
 
-    // create multiple default association between deals and companies
+    // create multiple default associations between deals and companies
     hsassociations:BatchResponsePublicDefaultAssociation createDefaultResponse = check hubspot->/associations/[mockFromObjectType]/[mockToObjectType]/batch/associate/default.post(
         payload = {
             inputs: [
@@ -69,7 +69,7 @@ public function main() returns error? {
 
     io:println("\nCreate default associations response : \n", createDefaultResponse);
 
-    // create multiple association with custom label between deals and companies
+    // create multiple associations with custom label between deals and companies
     hsassociations:BatchResponseLabelsBetweenObjectPair createCustomResponse = check hubspot->/associations/[mockFromObjectType]/[mockToObjectType]/batch/create.post(
         payload = {
             inputs: [
@@ -108,12 +108,19 @@ public function main() returns error? {
     io:println("\nCreate custom associations response : \n", createCustomResponse, "\n");
 
     // read associations of a deal with companies (dealId = 46989749974)
-    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse = check hubspot->/objects/[mockFromObjectType]/[mockFromObjectId1]/associations/[mockToObjectType].get();
+    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse = check readAssociations(mockFromObjectType, mockFromObjectId1, mockToObjectType);
 
     io:println(string `All created associations for deals(${mockFromObjectId1}) with companies response : `, readResponse, "\n");
 
     // read associations of a company with deals (companyId = 43500581578)
-    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse2 = check hubspot->/objects/[mockToObjectType]/[mockToObjectId1]/associations/[mockFromObjectType].get();
+    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse2 = check readAssociations(mockToObjectType, mockToObjectId2, mockFromObjectType);
 
-    io:println(string `All created associations for companies(${mockToObjectId1}) with deals response : `, readResponse2);
+    io:println(string `All created associations for deals(${mockToObjectId2}) with companies response : `, readResponse2);
+}
+
+
+// read all associations between deals and companies by object id
+function readAssociations(string fromObjectType, string fromObjectId, string toObjectType) returns hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging|error {
+    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse = check hubspot->/objects/[fromObjectType]/[fromObjectId]/associations/[toObjectType].get();
+    return readResponse;
 }
