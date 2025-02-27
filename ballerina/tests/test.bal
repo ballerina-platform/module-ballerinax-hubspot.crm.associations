@@ -20,10 +20,10 @@ import ballerina/test;
 
 final string serviceUrl = isLiveServer ? "https://api.hubapi.com/crm/v4" : "http://localhost:9090";
 
-configurable boolean isLiveServer = ?;
-configurable string clientId = ?;
-configurable string clientSecret = ?;
-configurable string refreshToken = ?;
+configurable boolean isLiveServer = false;
+configurable string clientId = "clientId";
+configurable string clientSecret = "clientSecret";
+configurable string refreshToken = "refreshToken";
 
 final Client hubspotAssociations = check initClient();
 
