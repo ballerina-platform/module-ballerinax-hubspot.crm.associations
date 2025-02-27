@@ -1,11 +1,3 @@
-# Ballerina HubSpot CRM Associations connector
-
-[![Build](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/actions/workflows/ci.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/actions/workflows/ci.yml)
-[![Trivy](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/actions/workflows/trivy-scan.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/actions/workflows/trivy-scan.yml)
-[![GraalVM Check](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/actions/workflows/build-with-bal-test-graalvm.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/actions/workflows/build-with-bal-test-graalvm.yml)
-[![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerinax-hubspot.crm.associations.svg)](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/commits/master)
-[![GitHub Issues](https://img.shields.io/github/issues/ballerina-platform/ballerina-library/module/hubspot.crm.associations.svg?label=Open%20Issues)](https://github.com/ballerina-platform/ballerina-library/labels/module%hubspot.crm.associations)
-
 ## Overview
 
 [HubSpot](https://developers.hubspot.com) is an AI-powered customer relationship management (CRM) platform.
@@ -191,7 +183,6 @@ import ballerina/oauth2;
 
     final hsassociations:Client hubspot = check new (config);
     ```
-
 ### Step 3: Invoke the connector operation
 
 Now, utilize the available connector operations. A sample usecase is shown below.
@@ -211,96 +202,3 @@ The `HubSpot CRM Associations` connector provides practical examples illustratin
 
 1. Create and read associations –  This example demonstrates how to use the HubSpot CRM Associations connector to batch-create default and custom-labeled associations between deals and companies, as well as retrieve existing associations for a given deal. Refer to this example [here](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/tree/main/examples/create-read-associations).
 2. Create and delete associations - This example demonstrates how to use the HubSpot CRM Associations connector to create individual default associations with and without labels between deals and companies. It then shows how to delete a specific association label between them, followed by deleting all associations between the two objects.Refer to this example [here](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/tree/main/examples/create-delete-associations).
-
-## Build from the source
-
-### Setting up the prerequisites
-
-1. Download and install Java SE Development Kit (JDK) version 21. You can download it from either of the following sources:
-
-    * [Oracle JDK](https://www.oracle.com/java/technologies/downloads/)
-    * [OpenJDK](https://adoptium.net/)
-
-   > **Note:** After installation, remember to set the `JAVA_HOME` environment variable to the directory where JDK was installed.
-
-2. Download and install [Ballerina Swan Lake](https://ballerina.io/).
-
-3. Download and install [Docker](https://www.docker.com/get-started).
-
-   > **Note**: Ensure that the Docker daemon is running before executing any tests.
-
-4. Export Github Personal access token with read package permissions as follows,
-
-    ```bash
-    export packageUser=<Username>
-    export packagePAT=<Personal access token>
-    ```
-
-### Build options
-
-Execute the commands below to build from the source.
-
-1. To build the package:
-
-   ```bash
-   ./gradlew clean build
-   ```
-
-2. To run the tests:
-
-   ```bash
-   ./gradlew clean test
-   ```
-
-3. To build the without the tests:
-
-   ```bash
-   ./gradlew clean build -x test
-   ```
-
-4. To run tests against different environments:
-
-   ```bash
-   ./gradlew clean test -Pgroups=<Comma separated groups/test cases>
-   ```
-
-5. To debug the package with a remote debugger:
-
-   ```bash
-   ./gradlew clean build -Pdebug=<port>
-   ```
-
-6. To debug with the Ballerina language:
-
-   ```bash
-   ./gradlew clean build -PbalJavaDebug=<port>
-   ```
-
-7. Publish the generated artifacts to the local Ballerina Central repository:
-
-    ```bash
-    ./gradlew clean build -PpublishToLocalCentral=true
-    ```
-
-8. Publish the generated artifacts to the Ballerina Central repository:
-
-   ```bash
-   ./gradlew clean build -PpublishToCentral=true
-   ```
-
-## Contribute to Ballerina
-
-As an open-source project, Ballerina welcomes contributions from the community.
-
-For more information, go to the [contribution guidelines](https://github.com/ballerina-platform/ballerina-lang/blob/master/CONTRIBUTING.md).
-
-## Code of conduct
-
-All the contributors are encouraged to read the [Ballerina Code of Conduct](https://ballerina.io/code-of-conduct).
-
-## Useful links
-
-* For more information go to the [`hubspot.crm.associations` package](https://central.ballerina.io/ballerinax/hubspot.crm.associations/latest).
-* For example demonstrations of the usage, go to [Ballerina By Examples](https://ballerina.io/learn/by-example/).
-* Chat live with us via our [Discord server](https://discord.gg/ballerinalang).
-* Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.

@@ -139,10 +139,10 @@ http:Service mockService = service object {
                 results: [
                     {
                         fromObjectTypeId: "0-3",
-                        fromObjectId: 41479955131,
+                        fromObjectId: 46989749974,
                         toObjectTypeId: "0-2",
-                        toObjectId: 38056537805,
-                        labels: ["d->c"]
+                        toObjectId: 43500581578,
+                        labels: ["test-deal->company-1"]
                     }
                 ],
                 startedAt: "2025-02-18T08:53:51.080Z",
@@ -177,10 +177,12 @@ http:Service mockService = service object {
             status: "COMPLETE",
             results: [
                 {
-                    'from: {id: "41479955131"},
+                    'from: {
+                        id: "46989749974"
+                    },
                     to: [
                         {
-                            toObjectId: 38056537805,
+                            toObjectId: 43500581578,
                             associationTypes: [
                                 {
                                     category: "HUBSPOT_DEFINED",
@@ -231,7 +233,7 @@ http:Service mockService = service object {
                 timeZoneShift: 0
             },
             userId: userId,
-            userEmail: "deltaxb21@gmail.com"
+            userEmail: "email@gmail.com"
         };
     }
 
@@ -245,16 +247,24 @@ http:Service mockService = service object {
             status: "COMPLETE",
             results: [
                 {
-                    'from: {id: "41479955131"},
-                    to: {id: "38056537829"},
+                    'from: {
+                        id: "46989749974"
+                    },
+                    to: {
+                        id: "43500581578"
+                    },
                     associationSpec: {
                         associationCategory: "HUBSPOT_DEFINED",
                         associationTypeId: 341
                     }
                 },
                 {
-                    'from: {id: "38056537829"},
-                    to: {id: "41479955131"},
+                    'from: {
+                        id: "38056537829"
+                    },
+                    to: {
+                        id: "41479955131"
+                    },
                     associationSpec: {
                         associationCategory: "HUBSPOT_DEFINED",
                         associationTypeId: 342
@@ -274,10 +284,10 @@ http:Service mockService = service object {
     resource function put objects/[string objectType]/[string objectId]/associations/[string toObjectType]/[string toObjectId](@http:Payload AssociationSpec[] payload) returns LabelsBetweenObjectPair|error {
         return {
             fromObjectTypeId: "0-3",
-            fromObjectId: 41479955131,
+            fromObjectId: 46989749974,
             toObjectTypeId: "0-2",
-            toObjectId: 38056537829,
-            labels: ["d->c"]
+            toObjectId: 43500581578,
+            labels: ["test-deal->company-1"]
         };
     }
 };
