@@ -36,31 +36,31 @@ final hsassociations:Client hubspot = check new (config);
 
 const string mockFromObjectType = "deals";
 const string mockToObjectType = "companies";
-const string mockFromObjectId1 = "46989749974";
-const string mockToObjectId1 = "43500581578";
+const string mockFromObjectId = "46989749974";
+const string mockToObjectId = "43500581578";
 
 public function main() returns error? {
 
-    // create individual default association between deals and companies
-    hsassociations:BatchResponsePublicDefaultAssociation createDefaultResponse = check hubspot->/objects/[mockFromObjectType]/[mockFromObjectId1]/associations/default/[mockToObjectType]/[mockToObjectId1].put();
+    // create an individual default associations between a deal and a company
+    hsassociations:BatchResponsePublicDefaultAssociation createDefaultResponse = check hubspot->/objects/[mockFromObjectType]/[mockFromObjectId]/associations/default/[mockToObjectType]/[mockToObjectId].put();
 
-    io:println("\nCreate individual default association between deals and companies response : \n", createDefaultResponse);
+    io:println("\nCreate individual default associations between a deal and a company response : \n", createDefaultResponse);
 
-    // create individual association with label between deals and companies
-    hsassociations:LabelsBetweenObjectPair createLabelResponse = check hubspot->/objects/[mockFromObjectType]/[mockFromObjectId1]/associations/[mockToObjectType]/[mockToObjectId1].put(
+    // create individual associations with label between a deal and a company
+    hsassociations:LabelsBetweenObjectPair createLabelResponse = check hubspot->/objects/[mockFromObjectType]/[mockFromObjectId]/associations/[mockToObjectType]/[mockToObjectId].put(
         payload = [{
                 associationCategory: "USER_DEFINED",
                 associationTypeId: 3
             }]
     );
 
-    io:println("\nCreate individual association with label between deals and companies response : \n", createLabelResponse);
+    io:println("\nCreate individual associations with label between a deal and a company response : \n", createLabelResponse);
 
-    // read association between deals and companies
-    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse = check readAssociation();
-    io:println("\nRead association between deals and companies : \n", readResponse);
+    // read associations between deals and companies
+    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse = check readAssociations(mockFromObjectId);
+    io:println("\nRead associations between deals and companies : \n", readResponse);
 
-    // delete specific association between deals and companies
+    // delete specific associations between deals and companies
     http:Response _ = check hubspot->/associations/[mockFromObjectType]/[mockToObjectType]/batch/labels/archive.post(
         payload = {inputs: [
                 {
@@ -69,30 +69,30 @@ public function main() returns error? {
                             associationTypeId: 3
                         }],
                     'from: {
-                        id: mockFromObjectId1
+                        id: mockFromObjectId
                     },
                     to: {
-                        id: mockToObjectId1
+                        id: mockToObjectId
                     }
                 }
             
             ]}
     );
 
-    // read association between deals and companies after deletion 
-    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponseAfterDeleteSpecific = check readAssociation();
-    io:println("\nRead association between deals and companies after deletion associationTypeId=3 : \n", readResponseAfterDeleteSpecific);
+    // read associations between deals and companies after deleting
+    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponseAfterDeleteSpecific = check readAssociations(mockFromObjectId);
+    io:println("\nRead associations between deals and companies after deleting (associationTypeId=3) : \n", readResponseAfterDeleteSpecific);
 
-    // delete all associations between deals and companies
-    http:Response _ = check hubspot->/objects/[mockFromObjectType]/[mockFromObjectId1]/associations/[mockToObjectType]/[mockToObjectId1].delete();
+    // delete all associations between a deal and a company
+    http:Response _ = check hubspot->/objects/[mockFromObjectType]/[mockFromObjectId]/associations/[mockToObjectType]/[mockToObjectId].delete();
 
-    // read association between deals and companies after deletion all associations
-    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponseAfterDeleteAll = check readAssociation();
-    io:println("\nRead association between deals and companies after deletion all associations : \n", readResponseAfterDeleteAll);
+    // read associations between deals and companies after deleting all associations
+    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponseAfterDeleteAll = check readAssociations(mockFromObjectId);
+    io:println("\nRead associations between deals and companies after deleting all associations : \n", readResponseAfterDeleteAll);
 }
 
-// read specific association between deals and companies
-function readAssociation() returns hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging|error {
-    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse = check hubspot->/objects/[mockToObjectType]/[mockToObjectId1]/associations/[mockFromObjectType].get();
+// read all associations between a deal and companies by object id
+function readAssociations(string fromObjectId) returns hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging|error {
+    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse = check hubspot->/objects/[mockFromObjectType]/[fromObjectId]/associations/[mockToObjectType].get();
     return readResponse;
 }
