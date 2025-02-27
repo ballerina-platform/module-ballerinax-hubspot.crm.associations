@@ -6,7 +6,7 @@ This example demonstrates how to use the HubSpot CRM Associations connector to b
 
 1. Generate HubSpot credentials to authenticate the connector as described in the [Setup guide](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations/blob/main/ballerina/Readme.md#setup-guide).
 
-2. For each example, create a `Config.toml` file the related configuration. Here's an example of how your `Config.toml` file should look:
+2. For each example, create a `Config.toml` file with the related configuration. Here's an example of how your `Config.toml` file should look:
 
     ```toml
     clientId = <Client Id>
