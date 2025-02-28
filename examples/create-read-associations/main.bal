@@ -43,7 +43,7 @@ const string TO_OBJECT_ID_2 = "43626089171";
 public function main() returns error? {
 
     // create multiple default associations between deals and companies
-    hsassociations:BatchResponsePublicDefaultAssociation createDefaultResponse = check hubspot->/associations/[FROM_OBJECT_TYPE]/[TO_OBJECT_TYPE ]/batch/associate/default.post(
+    hsassociations:BatchResponsePublicDefaultAssociation createDefaultResponse = check hubspot->/associations/[FROM_OBJECT_TYPE]/[TO_OBJECT_TYPE]/batch/associate/default.post(
         payload = {
             inputs: [
                 {
@@ -69,7 +69,7 @@ public function main() returns error? {
     io:println("\nCreate default associations response : \n", createDefaultResponse);
 
     // create multiple associations with custom label between deals and companies
-    hsassociations:BatchResponseLabelsBetweenObjectPair createCustomResponse = check hubspot->/associations/[FROM_OBJECT_TYPE]/[TO_OBJECT_TYPE ]/batch/create.post(
+    hsassociations:BatchResponseLabelsBetweenObjectPair createCustomResponse = check hubspot->/associations/[FROM_OBJECT_TYPE]/[TO_OBJECT_TYPE]/batch/create.post(
         payload = {
             inputs: [
                 {
@@ -107,16 +107,10 @@ public function main() returns error? {
     io:println("\nCreate custom associations response : \n", createCustomResponse, "\n");
 
     // read associations of a deal with companies (dealId = 46989749974)
-    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse = check readAssociations(FROM_OBJECT_ID_1);
+    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse = check hubspot->/objects/[FROM_OBJECT_TYPE]/[FROM_OBJECT_ID_1]/associations/[TO_OBJECT_TYPE];
     io:println(string `All created associations for deals(${FROM_OBJECT_ID_1}) with companies response : `, readResponse, "\n");
 
     // read associations of a deal with companies (dealId = 46989749975)
-    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse2 = check readAssociations(FROM_OBJECT_ID_2);
+    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse2 = check hubspot->/objects/[FROM_OBJECT_TYPE]/[FROM_OBJECT_ID_2]/associations/[TO_OBJECT_TYPE];
     io:println(string `All created associations for deals(${FROM_OBJECT_ID_2}) with companies response : `, readResponse2);
-}
-
-// read all associations between a deal and companies by object id
-function readAssociations(string fromObjectId) returns hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging|error {
-    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse = check hubspot->/objects/[FROM_OBJECT_TYPE]/[fromObjectId]/associations/[TO_OBJECT_TYPE ].get();
-    return readResponse;
 }
