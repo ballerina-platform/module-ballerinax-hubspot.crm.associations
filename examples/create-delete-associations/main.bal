@@ -48,26 +48,31 @@ public function main() returns error? {
 
     // create individual associations with label between a deal and a company
     hsassociations:LabelsBetweenObjectPair createLabelResponse = check hubspot->/objects/[FROM_OBJECT_TYPE]/[FROM_OBJECT_ID]/associations/[TO_OBJECT_TYPE]/[TO_OBJECT_ID].put(
-        payload = [{
+        payload = [
+            {
                 associationCategory: "USER_DEFINED",
                 associationTypeId: 3
-            }]
+            }
+        ]
     );
 
     io:println("\nCreate individual associations with label between a deal and a company response : \n", createLabelResponse);
 
     // read associations between deals and companies
-    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse = check readAssociations(FROM_OBJECT_ID);
+    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse = check hubspot->/objects/[FROM_OBJECT_TYPE]/[FROM_OBJECT_ID]/associations/[TO_OBJECT_TYPE];
     io:println("\nRead associations between deals and companies : \n", readResponse);
 
     // delete specific associations between deals and companies
     http:Response _ = check hubspot->/associations/[FROM_OBJECT_TYPE]/[TO_OBJECT_TYPE]/batch/labels/archive.post(
-        payload = {inputs: [
+        payload = {
+            inputs: [
                 {
-                    types: [{
+                    types: [
+                        {
                             associationCategory: "USER_DEFINED",
                             associationTypeId: 3
-                        }],
+                        }
+                    ],
                     'from: {
                         id: FROM_OBJECT_ID
                     },
@@ -75,25 +80,19 @@ public function main() returns error? {
                         id: TO_OBJECT_ID
                     }
                 }
-            
-            ]}
+
+            ]
+        }
     );
 
     // read associations between deals and companies after deleting
-    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponseAfterDeleteSpecific = check readAssociations(FROM_OBJECT_ID);
+    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponseAfterDeleteSpecific = check hubspot->/objects/[FROM_OBJECT_TYPE]/[FROM_OBJECT_ID]/associations/[TO_OBJECT_TYPE];
     io:println("\nRead associations between deals and companies after deleting (associationTypeId=3) : \n", readResponseAfterDeleteSpecific);
 
     // delete all associations between a deal and a company
     http:Response _ = check hubspot->/objects/[FROM_OBJECT_TYPE]/[FROM_OBJECT_ID]/associations/[TO_OBJECT_TYPE]/[TO_OBJECT_ID].delete();
 
     // read associations between deals and companies after deleting all associations
-    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponseAfterDeleteAll = check readAssociations(FROM_OBJECT_ID);
+    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponseAfterDeleteAll = check hubspot->/objects/[FROM_OBJECT_TYPE]/[FROM_OBJECT_ID]/associations/[TO_OBJECT_TYPE];
     io:println("\nRead associations between deals and companies after deleting all associations : \n", readResponseAfterDeleteAll);
-}
-
-// read all associations between a deal and companies by object id
-// remove this one
-function readAssociations(string fromObjectId) returns hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging|error {
-    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse = check hubspot->/objects/[FROM_OBJECT_TYPE]/[fromObjectId]/associations/[TO_OBJECT_TYPE];
-    return readResponse;
 }
