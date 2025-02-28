@@ -33,33 +33,33 @@ hsassociations:ConnectionConfig config = {
 
 final hsassociations:Client hubspot = check new (config);
 
-const string mockFromObjectType = "deals";
-const string mockToObjectType = "companies";
-const string mockFromObjectId1 = "46989749974";
-const string mockToObjectId1 = "43500581578";
-const string mockFromObjectId2 = "46989749975";
-const string mockToObjectId2 = "43626089171";
+const string FROM_OBJECT_TYPE = "deals";
+const string TO_OBJECT_TYPE = "companies";
+const string FROM_OBJECT_ID_1 = "46989749974";
+const string TO_OBJECT_ID_1 = "43500581578";
+const string FROM_OBJECT_ID_2 = "46989749975";
+const string TO_OBJECT_ID_2 = "43626089171";
 
 public function main() returns error? {
 
     // create multiple default associations between deals and companies
-    hsassociations:BatchResponsePublicDefaultAssociation createDefaultResponse = check hubspot->/associations/[mockFromObjectType]/[mockToObjectType]/batch/associate/default.post(
+    hsassociations:BatchResponsePublicDefaultAssociation createDefaultResponse = check hubspot->/associations/[FROM_OBJECT_TYPE]/[TO_OBJECT_TYPE ]/batch/associate/default.post(
         payload = {
             inputs: [
                 {
                     'from: {
-                        id: mockFromObjectId1
+                        id: FROM_OBJECT_ID_1
                     },
                     to: {
-                        id: mockToObjectId1
+                        id: TO_OBJECT_ID_1
                     }
                 },
                 {
                     'from: {
-                        id: mockFromObjectId2
+                        id: FROM_OBJECT_ID_2
                     },
                     to: {
-                        id: mockToObjectId2
+                        id: TO_OBJECT_ID_2
                     }
                 }
             ]
@@ -69,15 +69,15 @@ public function main() returns error? {
     io:println("\nCreate default associations response : \n", createDefaultResponse);
 
     // create multiple associations with custom label between deals and companies
-    hsassociations:BatchResponseLabelsBetweenObjectPair createCustomResponse = check hubspot->/associations/[mockFromObjectType]/[mockToObjectType]/batch/create.post(
+    hsassociations:BatchResponseLabelsBetweenObjectPair createCustomResponse = check hubspot->/associations/[FROM_OBJECT_TYPE]/[TO_OBJECT_TYPE ]/batch/create.post(
         payload = {
             inputs: [
                 {
                     'from: {
-                        id: mockFromObjectId1
+                        id: FROM_OBJECT_ID_1
                     },
                     to: {
-                        id: mockToObjectId1
+                        id: TO_OBJECT_ID_1
                     },
                     types: [
                         {
@@ -88,10 +88,10 @@ public function main() returns error? {
                 },
                 {
                     'from: {
-                        id: mockFromObjectId2
+                        id: FROM_OBJECT_ID_2
                     },
                     to: {
-                        id: mockToObjectId2
+                        id: TO_OBJECT_ID_2
                     },
                     types: [
                         {
@@ -107,16 +107,16 @@ public function main() returns error? {
     io:println("\nCreate custom associations response : \n", createCustomResponse, "\n");
 
     // read associations of a deal with companies (dealId = 46989749974)
-    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse = check readAssociations(mockFromObjectId1);
-    io:println(string `All created associations for deals(${mockFromObjectId1}) with companies response : `, readResponse, "\n");
+    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse = check readAssociations(FROM_OBJECT_ID_1);
+    io:println(string `All created associations for deals(${FROM_OBJECT_ID_1}) with companies response : `, readResponse, "\n");
 
     // read associations of a deal with companies (dealId = 46989749975)
-    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse2 = check readAssociations(mockFromObjectId2);
-    io:println(string `All created associations for deals(${mockFromObjectId2}) with companies response : `, readResponse2);
+    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse2 = check readAssociations(FROM_OBJECT_ID_2);
+    io:println(string `All created associations for deals(${FROM_OBJECT_ID_2}) with companies response : `, readResponse2);
 }
 
 // read all associations between a deal and companies by object id
 function readAssociations(string fromObjectId) returns hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging|error {
-    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse = check hubspot->/objects/[mockFromObjectType]/[fromObjectId]/associations/[mockToObjectType].get();
+    hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponse = check hubspot->/objects/[FROM_OBJECT_TYPE]/[fromObjectId]/associations/[TO_OBJECT_TYPE ].get();
     return readResponse;
 }
