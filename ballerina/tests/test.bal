@@ -55,7 +55,7 @@ isolated function initClient() returns Client|error {
     dependsOn: [testCreateAssociationLabel, testCreateDefaultAssociation, testCreateCustomAssociation, testCreateDefaultAssociationType]
 }
 isolated function testGetAssociationsList() returns error? {
-    CollectionResponseMultiAssociatedObjectWithLabelForwardPaging response = check hubspotAssociations->/objects/[FROM_OBJECT_TYPE]/[FROM_OBJECT_ID]/associations/[TO_OBJECT_TYPE].get();
+    CollectionResponseMultiAssociatedObjectWithLabelForwardPaging response = check hubspotAssociations->/objects/[FROM_OBJECT_TYPE]/[FROM_OBJECT_ID]/associations/[TO_OBJECT_TYPE];
     test:assertTrue(response.results.length() > 0, msg = "Expected at least one association, but found none.");
 }
 
@@ -225,7 +225,7 @@ isolated function testDeleteAllAssociations() returns error? {
     groups: ["live_tests", "mock_tests", "negative_tests"]
 }
 isolated function testGetAssociationsListByInvalidObjectType() returns error? {
-    CollectionResponseMultiAssociatedObjectWithLabelForwardPaging|error response = hubspotAssociations->/objects/[INVALID_FROM_OBJECT_TYPE]/[FROM_OBJECT_ID]/associations/invalidObjectType.get();
+    CollectionResponseMultiAssociatedObjectWithLabelForwardPaging|error response = hubspotAssociations->/objects/[INVALID_FROM_OBJECT_TYPE]/[FROM_OBJECT_ID]/associations/invalidObjectType;
     test:assertTrue(response is error, msg = "Expected an error response, but got a successful response.");
 }
 
