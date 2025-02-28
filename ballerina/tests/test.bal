@@ -18,62 +18,60 @@ import ballerina/http;
 import ballerina/oauth2;
 import ballerina/test;
 
-final string serviceUrl = isLiveServer ? "https://api.hubapi.com/crm/v4" : "http://localhost:9090";
-
 configurable boolean isLiveServer = false;
 configurable string clientId = "clientId";
 configurable string clientSecret = "clientSecret";
 configurable string refreshToken = "refreshToken";
+
+const string FROM_OBJECT_TYPE = "deals";
+const string TO_OBJECT_TYPE = "companies";
+const string FROM_OBJECT_ID = "46989749974";
+const string TO_OBJECT_ID = "43500581578";
+const int:Signed32 USER_ID = 77406147;
+const string INVALID_FROM_OBJECT_TYPE = "dea";
+const string INVALID_TO_OBJECT_TYPE = "com";
 
 final Client hubspotAssociations = check initClient();
 
 isolated function initClient() returns Client|error {
     if isLiveServer {
         OAuth2RefreshTokenGrantConfig auth = {
-            clientId: clientId,
-            clientSecret: clientSecret,
-            refreshToken: refreshToken,
+            clientId,
+            clientSecret,
+            refreshToken,
             credentialBearer: oauth2:POST_BODY_BEARER
         };
-        return check new ({auth}, serviceUrl);
+        return check new ({auth}, "https://api.hubapi.com/crm/v4");
     }
     return check new ({
         auth: {
             token: "test-token"
         }
-    }, serviceUrl);
+    }, "http://localhost:9090");
 }
 
-const string mockFromObjectType = "deals";
-const string mockToObjectType = "companies";
-const string mockFromObjectId = "46989749974";
-const string mockToObjectId = "43500581578";
-const int:Signed32 mockUserId = 77406147;
-const string mockInvalidFromObjectType = "dea";
-const string mockInvalidToObjectType = "com";
-
 @test:Config {
-    groups: ["live_tests", "mock_tests"],
+    groups: ["live_tests", "mock_tests", "positive_tests"],
     dependsOn: [testCreateAssociationLabel, testCreateDefaultAssociation, testCreateCustomAssociation, testCreateDefaultAssociationType]
 }
 isolated function testGetAssociationsList() returns error? {
-    CollectionResponseMultiAssociatedObjectWithLabelForwardPaging response = check hubspotAssociations->/objects/[mockFromObjectType]/[mockFromObjectId]/associations/[mockToObjectType].get();
+    CollectionResponseMultiAssociatedObjectWithLabelForwardPaging response = check hubspotAssociations->/objects/[FROM_OBJECT_TYPE]/[FROM_OBJECT_ID]/associations/[TO_OBJECT_TYPE].get();
     test:assertTrue(response.results.length() > 0, msg = "Expected at least one association, but found none.");
 }
 
 @test:Config {
-    groups: ["live_tests", "mock_tests"]
+    groups: ["live_tests", "mock_tests", "positive_tests"]
 }
 isolated function testCreateDefaultAssociation() returns error? {
-    BatchResponsePublicDefaultAssociation response = check hubspotAssociations->/associations/[mockFromObjectType]/[mockToObjectType]/batch/associate/default.post(
+    BatchResponsePublicDefaultAssociation response = check hubspotAssociations->/associations/[FROM_OBJECT_TYPE]/[TO_OBJECT_TYPE]/batch/associate/default.post(
         payload = {
             inputs: [
                 {
                     'from: {
-                        id: mockFromObjectId
+                        id: FROM_OBJECT_ID
                     },
                     to: {
-                        id: mockToObjectId
+                        id: TO_OBJECT_ID
                     }
                 }
             ]
@@ -83,10 +81,10 @@ isolated function testCreateDefaultAssociation() returns error? {
 }
 
 @test:Config {
-    groups: ["live_tests", "mock_tests"]
+    groups: ["live_tests", "mock_tests", "positive_tests"]
 }
 isolated function testCreateCustomAssociation() returns error? {
-    BatchResponseLabelsBetweenObjectPair|BatchResponseLabelsBetweenObjectPairWithErrors response = check hubspotAssociations->/associations/[mockFromObjectType]/[mockToObjectType]/batch/create.post(
+    BatchResponseLabelsBetweenObjectPair|BatchResponseLabelsBetweenObjectPairWithErrors response = check hubspotAssociations->/associations/[FROM_OBJECT_TYPE]/[TO_OBJECT_TYPE]/batch/create.post(
         payload = {
             inputs: [
                 {
@@ -97,10 +95,10 @@ isolated function testCreateCustomAssociation() returns error? {
                         }
                     ],
                     'from: {
-                        id: mockFromObjectId
+                        id: FROM_OBJECT_ID
                     },
                     to: {
-                        id: mockToObjectId
+                        id: TO_OBJECT_ID
                     }
                 }
             ]
@@ -111,15 +109,15 @@ isolated function testCreateCustomAssociation() returns error? {
 }
 
 @test:Config {
-    groups: ["live_tests", "mock_tests"],
+    groups: ["live_tests", "mock_tests", "positive_tests"],
     dependsOn: [testCreateAssociationLabel, testCreateDefaultAssociation, testCreateCustomAssociation, testCreateDefaultAssociationType]
 }
 isolated function testReadAssociation() returns error? {
-    BatchResponsePublicAssociationMultiWithLabel response = check hubspotAssociations->/associations/[mockFromObjectType]/[mockToObjectType]/batch/read.post(
+    BatchResponsePublicAssociationMultiWithLabel response = check hubspotAssociations->/associations/[FROM_OBJECT_TYPE]/[TO_OBJECT_TYPE]/batch/read.post(
         payload = {
             inputs: [
                 {
-                    id: mockFromObjectId
+                    id: FROM_OBJECT_ID
                 }
             ]
         }
@@ -128,26 +126,26 @@ isolated function testReadAssociation() returns error? {
 }
 
 @test:Config {
-    groups: ["live_tests", "mock_tests"]
+    groups: ["live_tests", "mock_tests", "positive_tests"]
 }
 isolated function testReport() returns error? {
-    ReportCreationResponse response = check hubspotAssociations->/associations/usage/high\-usage\-report/[mockUserId].post({});
-    test:assertEquals(response.userId, mockUserId, msg = string `Expected userId to be ${mockUserId.toString()}, but got ${response.userId.toString()}`);
+    ReportCreationResponse response = check hubspotAssociations->/associations/usage/high\-usage\-report/[USER_ID].post({});
+    test:assertEquals(response.userId, USER_ID, msg = string `Expected userId to be ${USER_ID.toString()}, but got ${response.userId.toString()}`);
 }
 
 @test:Config {
-    groups: ["live_tests", "mock_tests"]
+    groups: ["live_tests", "mock_tests", "positive_tests"]
 }
 isolated function testCreateDefaultAssociationType() returns error? {
-    BatchResponsePublicDefaultAssociation response = check hubspotAssociations->/objects/[mockFromObjectType]/[mockFromObjectId]/associations/default/[mockToObjectType]/[mockToObjectId].put({});
+    BatchResponsePublicDefaultAssociation response = check hubspotAssociations->/objects/[FROM_OBJECT_TYPE]/[FROM_OBJECT_ID]/associations/default/[TO_OBJECT_TYPE]/[TO_OBJECT_ID].put({});
     test:assertTrue(response.results.length() > 0, msg = "Expected at least one default association to be created, but found none.");
 }
 
 @test:Config {
-    groups: ["live_tests", "mock_tests"]
+    groups: ["live_tests", "mock_tests", "positive_tests"]
 }
 isolated function testCreateAssociationLabel() returns error? {
-    LabelsBetweenObjectPair response = check hubspotAssociations->/objects/[mockFromObjectType]/[mockFromObjectId]/associations/[mockToObjectType]/[mockToObjectId].put(
+    LabelsBetweenObjectPair response = check hubspotAssociations->/objects/[FROM_OBJECT_TYPE]/[FROM_OBJECT_ID]/associations/[TO_OBJECT_TYPE]/[TO_OBJECT_ID].put(
         [
             {
                 associationCategory: "USER_DEFINED",
@@ -155,25 +153,25 @@ isolated function testCreateAssociationLabel() returns error? {
             }
         ]
     );
-    test:assertEquals(response.fromObjectId.toString(), mockFromObjectId, msg = string `Expected toObjectId to be ${mockToObjectId.toString()} but got ${response.toObjectId.toString()}`);
-    test:assertEquals(response.toObjectId.toString(), mockToObjectId, msg = string `Expected toObjectId to be ${mockToObjectId.toString()}, but got ${response.toObjectId.toString()}`);
+    test:assertEquals(response.fromObjectId.toString(), FROM_OBJECT_ID, msg = string `Expected toObjectId to be ${TO_OBJECT_ID.toString()} but got ${response.toObjectId.toString()}`);
+    test:assertEquals(response.toObjectId.toString(), TO_OBJECT_ID, msg = string `Expected toObjectId to be ${TO_OBJECT_ID.toString()}, but got ${response.toObjectId.toString()}`);
 }
 
 @test:Config {
-    groups: ["live_tests", "mock_tests"],
+    groups: ["live_tests", "mock_tests", "positive_tests"],
     dependsOn: [testGetAssociationsList, testReadAssociation]
 }
 isolated function testRemoveAssociationBetweenObject() returns error? {
-    http:Response response = check hubspotAssociations->/associations/[mockFromObjectType]/[mockToObjectType]/batch/archive.post(
+    http:Response response = check hubspotAssociations->/associations/[FROM_OBJECT_TYPE]/[TO_OBJECT_TYPE]/batch/archive.post(
         payload = {
             inputs: [
                 {
                     'from: {
-                        id: mockFromObjectId
+                        id: FROM_OBJECT_ID
                     },
                     to: [
                         {
-                            id: mockToObjectId
+                            id: TO_OBJECT_ID
                         }
                     ]
                 }
@@ -185,11 +183,11 @@ isolated function testRemoveAssociationBetweenObject() returns error? {
 }
 
 @test:Config {
-    groups: ["live_tests", "mock_tests"],
+    groups: ["live_tests", "mock_tests", "positive_tests"],
     dependsOn: [testGetAssociationsList, testReadAssociation]
 }
 isolated function testDeleteSpecificLables() returns error? {
-    http:Response response = check hubspotAssociations->/associations/[mockFromObjectType]/[mockToObjectType]/batch/labels/archive.post(
+    http:Response response = check hubspotAssociations->/associations/[FROM_OBJECT_TYPE]/[TO_OBJECT_TYPE]/batch/labels/archive.post(
         payload = {
             inputs: [
                 {
@@ -200,10 +198,10 @@ isolated function testDeleteSpecificLables() returns error? {
                         }
                     ],
                     'from: {
-                        id: mockFromObjectId
+                        id: FROM_OBJECT_ID
                     },
                     to: {
-                        id: mockToObjectId
+                        id: TO_OBJECT_ID
                     }
                 }
             ]
@@ -214,36 +212,36 @@ isolated function testDeleteSpecificLables() returns error? {
 }
 
 @test:Config {
-    groups: ["live_tests", "mock_tests"],
+    groups: ["live_tests", "mock_tests", "positive_tests"],
     dependsOn: [testGetAssociationsList, testReadAssociation]
 }
 isolated function testDeleteAllAssociations() returns error? {
-    http:Response response = check hubspotAssociations->/objects/[mockToObjectType]/[mockToObjectId]/associations/[mockFromObjectType]/[mockFromObjectId].delete();
+    http:Response response = check hubspotAssociations->/objects/[FROM_OBJECT_TYPE]/[FROM_OBJECT_ID]/associations/[TO_OBJECT_TYPE]/[TO_OBJECT_ID].delete();
     test:assertEquals(response.statusCode, 204,
             msg = string `Expected status code 204 but got ${response.statusCode}`);
 }
 
 @test:Config {
-    groups: ["live_tests", "mock_tests"]
+    groups: ["live_tests", "mock_tests", "negative_tests"]
 }
 isolated function testGetAssociationsListByInvalidObjectType() returns error? {
-    CollectionResponseMultiAssociatedObjectWithLabelForwardPaging|error response = hubspotAssociations->/objects/[mockInvalidFromObjectType]/[mockFromObjectId]/associations/invalidObjectType.get();
+    CollectionResponseMultiAssociatedObjectWithLabelForwardPaging|error response = hubspotAssociations->/objects/[INVALID_FROM_OBJECT_TYPE]/[FROM_OBJECT_ID]/associations/invalidObjectType.get();
     test:assertTrue(response is error, msg = "Expected an error response, but got a successful response.");
 }
 
 @test:Config {
-    groups: ["live_tests", "mock_tests"]
+    groups: ["live_tests", "mock_tests", "negative_tests"]
 }
 isolated function testCreateDefaultAssociationByInvalidObjectType() returns error? {
-    BatchResponsePublicDefaultAssociation|error response = hubspotAssociations->/associations/[mockInvalidFromObjectType]/[mockInvalidToObjectType]/batch/associate/default.post(
+    BatchResponsePublicDefaultAssociation|error response = hubspotAssociations->/associations/[INVALID_FROM_OBJECT_TYPE]/[INVALID_TO_OBJECT_TYPE]/batch/associate/default.post(
         payload = {
             inputs: [
                 {
                     'from: {
-                        id: mockFromObjectId
+                        id: FROM_OBJECT_ID
                     },
                     to: {
-                        id: mockToObjectId
+                        id: TO_OBJECT_ID
                     }
                 }
             ]
@@ -253,10 +251,10 @@ isolated function testCreateDefaultAssociationByInvalidObjectType() returns erro
 }
 
 @test:Config {
-    groups: ["live_tests", "mock_tests"]
+    groups: ["live_tests", "mock_tests", "negative_tests"]
 }
 isolated function testCreateCustomAssociationByInvalidObjectType() returns error? {
-    BatchResponseLabelsBetweenObjectPair|BatchResponseLabelsBetweenObjectPairWithErrors|error response = hubspotAssociations->/associations/[mockInvalidFromObjectType]/[mockInvalidToObjectType]/batch/create.post(
+    BatchResponseLabelsBetweenObjectPair|BatchResponseLabelsBetweenObjectPairWithErrors|error response = hubspotAssociations->/associations/[INVALID_FROM_OBJECT_TYPE]/[INVALID_TO_OBJECT_TYPE]/batch/create.post(
         payload = {
             inputs: [
                 {
@@ -267,10 +265,10 @@ isolated function testCreateCustomAssociationByInvalidObjectType() returns error
                         }
                     ],
                     'from: {
-                        id: mockFromObjectId
+                        id: FROM_OBJECT_ID
                     },
                     to: {
-                        id: mockToObjectId
+                        id: TO_OBJECT_ID
                     }
                 }
             ]
@@ -280,10 +278,10 @@ isolated function testCreateCustomAssociationByInvalidObjectType() returns error
 }
 
 @test:Config {
-    groups: ["live_tests", "mock_tests"]
+    groups: ["live_tests", "mock_tests", "negative_tests"]
 }
 isolated function testDeleteSpecificLablesByInvalidObjectType() returns error? {
-    http:Response response = check hubspotAssociations->/associations/[mockInvalidFromObjectType]/[mockInvalidToObjectType]/batch/labels/archive.post(
+    http:Response response = check hubspotAssociations->/associations/[INVALID_FROM_OBJECT_TYPE]/[INVALID_TO_OBJECT_TYPE]/batch/labels/archive.post(
         payload = {
             inputs: [
                 {
@@ -294,10 +292,10 @@ isolated function testDeleteSpecificLablesByInvalidObjectType() returns error? {
                         }
                     ],
                     'from: {
-                        id: mockFromObjectId
+                        id: FROM_OBJECT_ID
                     },
                     to: {
-                        id: mockToObjectId
+                        id: TO_OBJECT_ID
                     }
                 }
             ]
@@ -308,28 +306,28 @@ isolated function testDeleteSpecificLablesByInvalidObjectType() returns error? {
 }
 
 @test:Config {
-    groups: ["live_tests", "mock_tests"]
+    groups: ["live_tests", "mock_tests", "negative_tests"]
 }
 isolated function testDeleteAllAssociationsByInvalidObjectType() returns error? {
-    http:Response response = check hubspotAssociations->/objects/[mockInvalidFromObjectType]/[mockFromObjectId]/associations/[mockInvalidToObjectType]/[mockToObjectId].delete();
+    http:Response response = check hubspotAssociations->/objects/[INVALID_FROM_OBJECT_TYPE]/[FROM_OBJECT_ID]/associations/[INVALID_TO_OBJECT_TYPE]/[TO_OBJECT_ID].delete();
     test:assertEquals(response.statusCode, 400,
             msg = string `Expected status code 400 but got ${response.statusCode}`);
 }
 
 @test:Config {
-    groups: ["live_tests", "mock_tests"]
+    groups: ["live_tests", "mock_tests", "negative_tests"]
 }
 isolated function testRemoveAssociationBetweenObjectByInvalidObjectType() returns error? {
-    http:Response response = check hubspotAssociations->/associations/[mockInvalidToObjectType]/[mockInvalidFromObjectType]/batch/archive.post(
+    http:Response response = check hubspotAssociations->/associations/[INVALID_TO_OBJECT_TYPE]/[INVALID_FROM_OBJECT_TYPE]/batch/archive.post(
         payload = {
             inputs: [
                 {
                     'from: {
-                        id: mockFromObjectId
+                        id: FROM_OBJECT_ID
                     },
                     to: [
                         {
-                            id: mockToObjectId
+                            id: TO_OBJECT_ID
                         }
                     ]
                 }

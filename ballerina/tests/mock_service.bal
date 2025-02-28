@@ -27,7 +27,7 @@ http:Service mockService = service object {
     # http:NoContent (Returns `http:Response` with status **204 No Content** on success, indicating successful deletion.)
     # http:DefaultStatusCodeResponse (An error occurred.)
     resource function delete objects/[string objectType]/[string objectId]/associations/[string toObjectType]/[string toObjectId]() returns http:NoContent|http:BadRequest|error {
-        if objectType == mockToObjectType && objectId == mockToObjectId && toObjectType == mockFromObjectType && toObjectId == mockFromObjectId {
+        if objectType == FROM_OBJECT_TYPE && objectId == FROM_OBJECT_ID && toObjectType == TO_OBJECT_TYPE && toObjectId == TO_OBJECT_ID {
             return http:NO_CONTENT;
         } else {
             return http:BAD_REQUEST;
@@ -42,7 +42,7 @@ http:Service mockService = service object {
     # http:Ok (successful operation)
     # http:DefaultStatusCodeResponse (An error occurred.)
     resource function get objects/[string objectType]/[string objectId]/associations/[string toObjectType](string? after, int:Signed32 'limit = 500) returns CollectionResponseMultiAssociatedObjectWithLabelForwardPaging|error {
-        if objectType == mockFromObjectType && objectId == mockFromObjectId && toObjectType == mockToObjectType {
+        if objectType == FROM_OBJECT_TYPE && objectId == FROM_OBJECT_ID && toObjectType == TO_OBJECT_TYPE {
             return {
                 results: [
                     {
@@ -88,7 +88,7 @@ http:Service mockService = service object {
     # http:NoContent (Returns `http:Response` with status **204 No Content** on success, indicating successful deletion.)
     # http:DefaultStatusCodeResponse (An error occurred.)
     resource function post associations/[string fromObjectType]/[string toObjectType]/batch/archive(@http:Payload BatchInputPublicAssociationMultiArchive payload) returns http:NoContent|http:BadRequest|error {
-        if fromObjectType == mockFromObjectType && toObjectType == mockToObjectType {
+        if fromObjectType == FROM_OBJECT_TYPE && toObjectType == TO_OBJECT_TYPE {
             return http:NO_CONTENT;
         } else {
             return http:BAD_REQUEST;
@@ -101,16 +101,16 @@ http:Service mockService = service object {
     # http:Ok (successful operation)
     # http:DefaultStatusCodeResponse (An error occurred.)
     resource function post associations/[string fromObjectType]/[string toObjectType]/batch/associate/default(@http:Payload BatchInputPublicDefaultAssociationMultiPost payload) returns BatchResponsePublicDefaultAssociation|error {
-        if fromObjectType == mockFromObjectType && toObjectType == mockToObjectType {
+        if fromObjectType == FROM_OBJECT_TYPE && toObjectType == TO_OBJECT_TYPE {
             return {
                 status: "COMPLETE",
                 results: [
                     {
                         'from: {
-                            id: mockFromObjectId
+                            id: FROM_OBJECT_ID
                         },
                         to: {
-                            id: mockToObjectId
+                            id: TO_OBJECT_ID
                         },
                         associationSpec: {
                             associationCategory: "HUBSPOT_DEFINED",
@@ -133,7 +133,7 @@ http:Service mockService = service object {
     # http:MultiStatus (multiple statuses)
     # http:DefaultStatusCodeResponse (An error occurred.)
     resource function post associations/[string fromObjectType]/[string toObjectType]/batch/create(@http:Payload BatchInputPublicAssociationMultiPost payload) returns BatchResponseLabelsBetweenObjectPair|error {
-        if fromObjectType == mockFromObjectType && toObjectType == mockToObjectType {
+        if fromObjectType == FROM_OBJECT_TYPE && toObjectType == TO_OBJECT_TYPE {
             return {
                 status: "COMPLETE",
                 results: [
@@ -159,7 +159,7 @@ http:Service mockService = service object {
     # http:NoContent (Returns `http:Response` with status **204 No Content** on success, indicating successful deletion.)
     # http:DefaultStatusCodeResponse (An error occurred.)
     resource function post associations/[string fromObjectType]/[string toObjectType]/batch/labels/archive(@http:Payload BatchInputPublicAssociationMultiPost payload) returns http:NoContent|http:BadRequest|error {
-        if fromObjectType == mockFromObjectType && toObjectType == mockToObjectType {
+        if fromObjectType == FROM_OBJECT_TYPE && toObjectType == TO_OBJECT_TYPE {
             return http:NO_CONTENT;
         } else {
             return http:BAD_REQUEST;
