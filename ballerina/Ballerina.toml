@@ -5,7 +5,8 @@ name = "hubspot.crm.associations"
 version = "1.0.0"
 license = ["Apache-2.0"]
 authors = ["Ballerina"]
-keywords = ["ballerina","hubspot","crm", "associations"] 
+keywords = [] # TODO: Add keywords
+# icon = "icon.png" # TODO: Add icon
 repository = "https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations"
 
 [build-options]
