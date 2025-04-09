@@ -14,7 +14,6 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/http;
 import ballerina/oauth2;
 import ballerina/test;
 
@@ -162,7 +161,7 @@ isolated function testCreateAssociationLabel() returns error? {
     dependsOn: [testGetAssociationsList, testReadAssociation]
 }
 isolated function testRemoveAssociationBetweenObject() returns error? {
-    http:Response response = check hubspotAssociations->/associations/[FROM_OBJECT_TYPE]/[TO_OBJECT_TYPE]/batch/archive.post(
+    error? response = check hubspotAssociations->/associations/[FROM_OBJECT_TYPE]/[TO_OBJECT_TYPE]/batch/archive.post(
         payload = {
             inputs: [
                 {
@@ -178,8 +177,7 @@ isolated function testRemoveAssociationBetweenObject() returns error? {
             ]
         }
     );
-    test:assertEquals(response.statusCode, 204,
-            msg = string `Expected status code 204 but got ${response.statusCode}`);
+    test:assertEquals(response, ());
 }
 
 @test:Config {
@@ -187,7 +185,7 @@ isolated function testRemoveAssociationBetweenObject() returns error? {
     dependsOn: [testGetAssociationsList, testReadAssociation]
 }
 isolated function testDeleteSpecificLables() returns error? {
-    http:Response response = check hubspotAssociations->/associations/[FROM_OBJECT_TYPE]/[TO_OBJECT_TYPE]/batch/labels/archive.post(
+    error? response = check hubspotAssociations->/associations/[FROM_OBJECT_TYPE]/[TO_OBJECT_TYPE]/batch/labels/archive.post(
         payload = {
             inputs: [
                 {
@@ -207,8 +205,7 @@ isolated function testDeleteSpecificLables() returns error? {
             ]
         }
     );
-    test:assertEquals(response.statusCode, 204,
-            msg = string `Expected status code 204 but got ${response.statusCode}`);
+    test:assertEquals(response, ());
 }
 
 @test:Config {
@@ -216,9 +213,8 @@ isolated function testDeleteSpecificLables() returns error? {
     dependsOn: [testGetAssociationsList, testReadAssociation]
 }
 isolated function testDeleteAllAssociations() returns error? {
-    http:Response response = check hubspotAssociations->/objects/[FROM_OBJECT_TYPE]/[FROM_OBJECT_ID]/associations/[TO_OBJECT_TYPE]/[TO_OBJECT_ID].delete();
-    test:assertEquals(response.statusCode, 204,
-            msg = string `Expected status code 204 but got ${response.statusCode}`);
+    error? response = check hubspotAssociations->/objects/[FROM_OBJECT_TYPE]/[FROM_OBJECT_ID]/associations/[TO_OBJECT_TYPE]/[TO_OBJECT_ID].delete();
+    test:assertEquals(response, ());
 }
 
 @test:Config {
@@ -281,7 +277,7 @@ isolated function testCreateCustomAssociationByInvalidObjectType() returns error
     groups: ["live_tests", "mock_tests", "negative_tests"]
 }
 isolated function testDeleteSpecificLablesByInvalidObjectType() returns error? {
-    http:Response response = check hubspotAssociations->/associations/[INVALID_FROM_OBJECT_TYPE]/[INVALID_TO_OBJECT_TYPE]/batch/labels/archive.post(
+    error? response = hubspotAssociations->/associations/[INVALID_FROM_OBJECT_TYPE]/[INVALID_TO_OBJECT_TYPE]/batch/labels/archive.post(
         payload = {
             inputs: [
                 {
@@ -301,24 +297,22 @@ isolated function testDeleteSpecificLablesByInvalidObjectType() returns error? {
             ]
         }
     );
-    test:assertEquals(response.statusCode, 400,
-            msg = string `Expected status code 400 but got ${response.statusCode}`);
+    test:assertTrue(response is error);
 }
 
 @test:Config {
     groups: ["live_tests", "mock_tests", "negative_tests"]
 }
 isolated function testDeleteAllAssociationsByInvalidObjectType() returns error? {
-    http:Response response = check hubspotAssociations->/objects/[INVALID_FROM_OBJECT_TYPE]/[FROM_OBJECT_ID]/associations/[INVALID_TO_OBJECT_TYPE]/[TO_OBJECT_ID].delete();
-    test:assertEquals(response.statusCode, 400,
-            msg = string `Expected status code 400 but got ${response.statusCode}`);
+    error? response = hubspotAssociations->/objects/[INVALID_FROM_OBJECT_TYPE]/[FROM_OBJECT_ID]/associations/[INVALID_TO_OBJECT_TYPE]/[TO_OBJECT_ID].delete();
+    test:assertTrue(response is error);
 }
 
 @test:Config {
     groups: ["live_tests", "mock_tests", "negative_tests"]
 }
 isolated function testRemoveAssociationBetweenObjectByInvalidObjectType() returns error? {
-    http:Response response = check hubspotAssociations->/associations/[INVALID_TO_OBJECT_TYPE]/[INVALID_FROM_OBJECT_TYPE]/batch/archive.post(
+    error? response = hubspotAssociations->/associations/[INVALID_TO_OBJECT_TYPE]/[INVALID_FROM_OBJECT_TYPE]/batch/archive.post(
         payload = {
             inputs: [
                 {
@@ -334,6 +328,5 @@ isolated function testRemoveAssociationBetweenObjectByInvalidObjectType() return
             ]
         }
     );
-    test:assertEquals(response.statusCode, 400,
-            msg = string `Expected status code 400 but got ${response.statusCode}`);
+    test:assertTrue(response is error);
 }

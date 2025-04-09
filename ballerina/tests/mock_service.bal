@@ -26,12 +26,9 @@ http:Service mockService = service object {
     # + return - returns can be any of following types 
     # http:NoContent (Returns `http:Response` with status **204 No Content** on success, indicating successful deletion.)
     # http:DefaultStatusCodeResponse (An error occurred.)
-    resource function delete objects/[string objectType]/[string objectId]/associations/[string toObjectType]/[string toObjectId]() returns http:NoContent|http:BadRequest|error {
-        if objectType == FROM_OBJECT_TYPE && objectId == FROM_OBJECT_ID && toObjectType == TO_OBJECT_TYPE && toObjectId == TO_OBJECT_ID {
-            return http:NO_CONTENT;
-        } else {
-            return http:BAD_REQUEST;
-        }
+    resource function delete objects/[string objectType]/[string objectId]/associations/[string toObjectType]/[string toObjectId]() returns error? {
+        return objectType == FROM_OBJECT_TYPE && objectId == FROM_OBJECT_ID && toObjectType == TO_OBJECT_TYPE && toObjectId == TO_OBJECT_ID 
+            ? () : error("Unable to infer object type from: " + objectType);
     }
 
     # List Associations of an Object by Type
@@ -87,11 +84,11 @@ http:Service mockService = service object {
     # + return - returns can be any of following types 
     # http:NoContent (Returns `http:Response` with status **204 No Content** on success, indicating successful deletion.)
     # http:DefaultStatusCodeResponse (An error occurred.)
-    resource function post associations/[string fromObjectType]/[string toObjectType]/batch/archive(@http:Payload BatchInputPublicAssociationMultiArchive payload) returns http:NoContent|http:BadRequest|error {
+    resource function post associations/[string fromObjectType]/[string toObjectType]/batch/archive(@http:Payload BatchInputPublicAssociationMultiArchive payload) returns error? {
         if fromObjectType == FROM_OBJECT_TYPE && toObjectType == TO_OBJECT_TYPE {
-            return http:NO_CONTENT;
+            return ();
         } else {
-            return http:BAD_REQUEST;
+            return error("Unable to infer object type from: " + fromObjectType);
         }
     }
 
@@ -158,12 +155,8 @@ http:Service mockService = service object {
     # + return - returns can be any of following types 
     # http:NoContent (Returns `http:Response` with status **204 No Content** on success, indicating successful deletion.)
     # http:DefaultStatusCodeResponse (An error occurred.)
-    resource function post associations/[string fromObjectType]/[string toObjectType]/batch/labels/archive(@http:Payload BatchInputPublicAssociationMultiPost payload) returns http:NoContent|http:BadRequest|error {
-        if fromObjectType == FROM_OBJECT_TYPE && toObjectType == TO_OBJECT_TYPE {
-            return http:NO_CONTENT;
-        } else {
-            return http:BAD_REQUEST;
-        }
+    resource function post associations/[string fromObjectType]/[string toObjectType]/batch/labels/archive(@http:Payload BatchInputPublicAssociationMultiPost payload) returns error? {
+        return fromObjectType == FROM_OBJECT_TYPE && toObjectType == TO_OBJECT_TYPE ? () : error("Unable to infer object type from: " + fromObjectType);
     }
 
     # Read Associations

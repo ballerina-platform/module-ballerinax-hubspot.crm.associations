@@ -74,5 +74,5 @@ buildExamples.dependsOn ":hubspot.crm.associations-ballerina:build"
 testExamples.dependsOn ":hubspot.crm.associations-ballerina:build"
 
 // TODO: Enable the examples build once https://github.com/ballerina-platform/ballerina-library/issues/6135 is fixed
-// test.dependsOn testExamples
-// build.dependsOn buildExamples
+test.dependsOn testExamples
+build.dependsOn buildExamples

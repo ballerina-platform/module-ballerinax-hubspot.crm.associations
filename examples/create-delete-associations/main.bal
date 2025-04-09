@@ -63,7 +63,7 @@ public function main() returns error? {
     io:println("\nRead associations between deals and companies : \n", readResponse);
 
     // delete specific associations between deals and companies
-    http:Response _ = check hubspot->/associations/[FROM_OBJECT_TYPE]/[TO_OBJECT_TYPE]/batch/labels/archive.post(
+    error? _ = check hubspot->/associations/[FROM_OBJECT_TYPE]/[TO_OBJECT_TYPE]/batch/labels/archive.post(
         payload = {
             inputs: [
                 {
@@ -90,7 +90,7 @@ public function main() returns error? {
     io:println("\nRead associations between deals and companies after deleting (associationTypeId=3) : \n", readResponseAfterDeleteSpecific);
 
     // delete all associations between a deal and a company
-    http:Response _ = check hubspot->/objects/[FROM_OBJECT_TYPE]/[FROM_OBJECT_ID]/associations/[TO_OBJECT_TYPE]/[TO_OBJECT_ID].delete();
+    error? _ = check hubspot->/objects/[FROM_OBJECT_TYPE]/[FROM_OBJECT_ID]/associations/[TO_OBJECT_TYPE]/[TO_OBJECT_ID].delete();
 
     // read associations between deals and companies after deleting all associations
     hsassociations:CollectionResponseMultiAssociatedObjectWithLabelForwardPaging readResponseAfterDeleteAll = check hubspot->/objects/[FROM_OBJECT_TYPE]/[FROM_OBJECT_ID]/associations/[TO_OBJECT_TYPE];
