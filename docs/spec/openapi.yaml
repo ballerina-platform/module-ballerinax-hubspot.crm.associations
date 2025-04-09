@@ -52,7 +52,8 @@ paths:
         required: true
       responses:
         "204":
-          description: Returns `http:Response` with status **204 No Content** on success, indicating successful deletion.
+          description: "Returns `http:Response` with status **204 No Content** on\
+            \ success, indicating successful deletion"
           content: {}
         default:
           description: An error occurred.
@@ -629,7 +630,8 @@ paths:
         required: true
       responses:
         "204":
-          description: Returns `http:Response` with status **204 No Content** on success, indicating successful deletion.
+          description: "Returns `http:Response` with status **204 No Content** on\
+            \ success, indicating successful deletion"
           content: {}
         default:
           description: An error occurred.
@@ -1434,7 +1436,8 @@ paths:
           type: string
       responses:
         "204":
-          description: Returns `http:Response` with status **204 No Content** on success, indicating successful deletion.
+          description: "Returns `http:Response` with status **204 No Content** on\
+            \ success, indicating successful deletion"
           content: {}
         default:
           description: An error occurred.
@@ -1627,7 +1630,7 @@ paths:
         in: query
         description: The paging cursor token of the last successfully read resource
           will be returned as the `paging.next.after` JSON property of a paged response
-          containing more results.
+          containing more results
         required: false
         style: form
         explode: true
@@ -1635,7 +1638,7 @@ paths:
           type: string
       - name: limit
         in: query
-        description: The maximum number of results to display per page.
+        description: The maximum number of results to display per page
         required: false
         style: form
         explode: true
@@ -2152,7 +2155,7 @@ components:
           description: The status code associated with the error detail
         in:
           type: string
-          description: The name of the field or parameter in which the error was found.
+          description: The name of the field or parameter in which the error was found
         context:
           type: object
           additionalProperties:
@@ -2628,10 +2631,12 @@ components:
       type: apiKey
       name: private-app-legacy
       in: header
+      x-ballerina-name: privateAppLegacy
     private_apps:
       type: apiKey
       name: private-app
       in: header
+      x-ballerina-name: privateApp
 x-hubspot-available-client-libraries:
 - PHP
 - Node
