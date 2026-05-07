@@ -23,7 +23,8 @@ jobs:
   analyze:
     name: Analyze connector version changes
     needs: [generate]
-    if: ${{ always() && (needs.generate.result == 'success' || needs.generate.result == 'failure') }}
+    if: ${{ always() && (needs.generate.result == 'success' || needs.generate.result == 'failure' || needs.generate.result == 'skipped') }}
+
     runs-on: ubuntu-latest
 
     steps:
