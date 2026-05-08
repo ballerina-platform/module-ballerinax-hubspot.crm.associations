@@ -8,8 +8,8 @@ on:
 jobs:
   generate:
     name: Generate connector using reusable workflow
-    if: ${{ github.event_name == 'repository_dispatch' && github.event.action == 'openapi-update' && github.repository_owner == 'orgBBalLib' }}
-    uses: orgBBalLib/ballerina-library/.github/workflows/auto_generate_connector_template.yml@main
+    if: ${{ github.event_name == 'repository_dispatch' && github.event.action == 'openapi-update' && github.repository_owner == 'ballerina-platform' }}
+    uses: ballerina-platform/ballerina-library/.github/workflows/auto_generate_connector_template.yml@main
     secrets:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       BALLERINA_BOT_TOKEN: ${{ secrets.BALLERINA_BOT_TOKEN }}
@@ -96,7 +96,7 @@ jobs:
       - name: Clone ballerina-library scripts
         if: steps.diff.outputs.has_code_changes == 'true'
         run: |
-          git clone -b main https://github.com/orgBBalLib/ballerina-library.git temp-library
+          git clone -b main https://github.com/ballerina-platform/ballerina-library.git temp-library
 
       - name: Run analysis
         if: steps.diff.outputs.has_code_changes == 'true'
