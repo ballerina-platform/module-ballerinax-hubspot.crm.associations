@@ -8,8 +8,8 @@ on:
 jobs:
   generate:
     name: Generate connector using reusable workflow
-    if: ${{ github.event_name == 'repository_dispatch' && github.event.action == 'openapi-update' && github.repository_owner == 'ballerina-platform' }}
-    uses: ballerina-platform/ballerina-library/.github/workflows/auto_generate_connector_template.yml@main
+    if: ${{ github.event_name == 'repository_dispatch' && github.event.action == 'openapi-update' && github.repository_owner == 'orgBBalLib' }}
+    uses: orgBBalLib/ballerina-library/.github/workflows/auto_generate_connector_template.yml@main
     secrets:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       BALLERINA_BOT_TOKEN: ${{ secrets.BALLERINA_BOT_TOKEN }}
@@ -29,7 +29,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.BALLERINA_BOT_TOKEN }}
@@ -68,7 +68,6 @@ jobs:
           BRANCH_NAME="${{ steps.find_branch.outputs.branch_name }}"
           echo "Generating diff between merge-base(origin/main, origin/$BRANCH_NAME) and origin/$BRANCH_NAME..."
 
-          # Check for ANY changes in the branch (gates PR creation)
           TOTAL_CHANGED=$(git diff origin/main...origin/$BRANCH_NAME --name-only)
           if [ -z "$TOTAL_CHANGED" ]; then
             echo "No changes detected in branch"
@@ -80,7 +79,6 @@ jobs:
           echo "Changed files:"
           echo "$TOTAL_CHANGED"
 
-          # Check client.bal/types.bal specifically (gates analysis, version bump, changelog)
           git diff origin/main...origin/$BRANCH_NAME -- ballerina/client.bal > client_diff.txt || true
           git diff origin/main...origin/$BRANCH_NAME -- ballerina/types.bal > types_diff.txt || true
           cat client_diff.txt types_diff.txt > git_diff.txt
@@ -94,9 +92,8 @@ jobs:
           fi
 
       - name: Clone ballerina-library scripts
-        if: steps.diff.outputs.has_code_changes == 'true'
         run: |
-          git clone -b main https://github.com/ballerina-platform/ballerina-library.git temp-library
+          git clone -b main https://github.com/orgBBalLib/ballerina-library.git temp-library
 
       - name: Run analysis
         if: steps.diff.outputs.has_code_changes == 'true'
@@ -121,7 +118,6 @@ jobs:
           bal run "$ANALYSIS_PKG" -- git_diff.txt
           rm -rf "$ANALYSIS_PKG"
 
-
       - name: Update version in gradle.properties
         if: steps.diff.outputs.has_code_changes == 'true'
         id: update_version
@@ -135,29 +131,7 @@ jobs:
           CURRENT_VERSION=$(grep '^version=' gradle.properties | cut -d'=' -f2)
           echo "Current version: $CURRENT_VERSION"
 
-          BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-SNAPSHOT//')
-          IFS='.' read -r MAJOR MINOR PATCH <<< "$BASE_VERSION"
-
-          case $CHANGE_TYPE in
-            MAJOR)
-              MAJOR=$((MAJOR + 1))
-              MINOR=0
-              PATCH=0
-              ;;
-            MINOR)
-              MINOR=$((MINOR + 1))
-              PATCH=0
-              ;;
-            PATCH)
-              PATCH=$((PATCH + 1))
-              ;;
-            *)
-              echo "Unknown change type: $CHANGE_TYPE"
-              exit 1
-              ;;
-          esac
-
-          NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}-SNAPSHOT"
+          NEW_VERSION=$(bash temp-library/connector_automator/resources/scripts/update_version.sh "$CHANGE_TYPE" "$CURRENT_VERSION")
           echo "New version: $NEW_VERSION"
 
           sed -i "s/^version=.*/version=$NEW_VERSION/" gradle.properties
@@ -169,71 +143,9 @@ jobs:
         if: steps.diff.outputs.has_code_changes == 'true'
         continue-on-error: true
         run: |
-          echo "Building PR description for changelog..."
+          bash temp-library/connector_automator/resources/scripts/build_changelog_description.sh \
+            analysis_result.json pr_description.txt
 
-          # Initialize the PR description file
-          echo "### Summary" > pr_description.txt
-          jq -r '.summary' analysis_result.json >> pr_description.txt
-          echo "" >> pr_description.txt
-
-          # Add Breaking Changes section
-          echo "### Breaking Changes" >> pr_description.txt
-          BREAKING_COUNT=$(jq -r '.breakingChanges | length' analysis_result.json)
-          if [ "$BREAKING_COUNT" -gt 0 ]; then
-            jq -r '.breakingChanges[]' analysis_result.json | while IFS= read -r line; do
-              echo "- $line" >> pr_description.txt
-            done
-          else
-            echo "- None" >> pr_description.txt
-          fi
-          echo "" >> pr_description.txt
-
-          # Add New Features section
-          echo "### New Features" >> pr_description.txt
-          FEATURES_COUNT=$(jq -r '.newFeatures | length' analysis_result.json)
-          if [ "$FEATURES_COUNT" -gt 0 ]; then
-            jq -r '.newFeatures[]' analysis_result.json | while IFS= read -r line; do
-              echo "- $line" >> pr_description.txt
-            done
-          else
-            echo "- None" >> pr_description.txt
-          fi
-          echo "" >> pr_description.txt
-
-          # Add Improvements section
-          echo "### Improvements" >> pr_description.txt
-          FIXES_COUNT=$(jq -r '.bugFixes | length' analysis_result.json)
-          if [ "$FIXES_COUNT" -gt 0 ]; then
-            jq -r '.bugFixes[]' analysis_result.json | while IFS= read -r line; do
-              echo "- $line" >> pr_description.txt
-            done
-          else
-            echo "- None" >> pr_description.txt
-          fi
-
-          echo ""
-          echo "=== Generated PR Description ==="
-          cat pr_description.txt
-          echo "================================"
-          echo ""
-
-          # Sanitize pr_description.txt before passing to update_changelog.bal.
-          # The script does substring(0, 50) on every line it processes, which
-          # crashes on lines shorter than 50 characters. Pad every line to at
-          # least 50 characters with trailing spaces so the call is always safe.
-          python3 - <<'PYEOF'
-          with open("pr_description.txt", "r") as f:
-              lines = f.readlines()
-          with open("pr_description.txt", "w") as f:
-              for line in lines:
-                  stripped = line.rstrip("\n")
-                  if len(stripped) < 50:
-                      stripped = stripped.ljust(50)
-                  f.write(stripped + "\n")
-          PYEOF
-
-          # Run changelog updater via a temp Ballerina package
-          # (update_changelog.bal exports runUpdateChangelog, not main)
           CHANGELOG_PKG=$(mktemp -d)
           cp temp-library/connector_automator/modules/client_regenerator/update_changelog.bal "$CHANGELOG_PKG/"
           cat > "$CHANGELOG_PKG/Ballerina.toml" << 'TOML'
@@ -250,14 +162,11 @@ jobs:
           bal run "$CHANGELOG_PKG" -- "$(cat pr_description.txt)"
           rm -rf "$CHANGELOG_PKG"
 
-          # Verify CHANGELOG.md was created/updated
           if [ -f "CHANGELOG.md" ]; then
-            echo "✅ CHANGELOG.md created/updated successfully"
-            echo "First 50 lines:"
+            echo "CHANGELOG.md created/updated successfully"
             head -50 CHANGELOG.md
           else
-            echo "⚠️ WARNING: CHANGELOG.md was not created"
-            ls -la
+            echo "WARNING: CHANGELOG.md was not created"
           fi
 
       - name: Extract code owners
@@ -286,7 +195,7 @@ jobs:
         continue-on-error: true
         env:
           packageUser: ${{ github.actor }}
-          packagePAT: ${{ secrets.PAT_TOKEN }}
+          packagePAT: ${{ secrets.BALLERINA_BOT_TOKEN }}
         run: |
           ./gradlew build -x test
           echo "Generated Ballerina files:"
@@ -300,39 +209,19 @@ jobs:
           git config --local user.email "ballerina-bot@ballerina.io"
           git config --local user.name "ballerina-bot"
 
-          echo "Files before git add:"
-          ls -la | grep -E '(CHANGELOG|gradle.properties|Ballerina.toml)'
-
-          # Add version file
           git add gradle.properties
-
           git add CHANGELOG.md 2>/dev/null || true
 
-          # Verify CHANGELOG.md is staged
-          if git diff --staged --name-only | grep -qi "changelog"; then
-            echo "✅ CHANGELOG.md is staged for commit"
-          else
-            echo "⚠️ WARNING: CHANGELOG.md is not staged!"
-            echo "Current directory contents:"
-            ls -la
-            echo "Git status:"
-            git status
-          fi
-
-          # Add generated Ballerina files if they exist
           if [ -f ballerina/Ballerina.toml ]; then
             git add ballerina/Ballerina.toml
-            echo "Added ballerina/Ballerina.toml"
           fi
           if [ -f ballerina/Dependencies.toml ]; then
             git add ballerina/Dependencies.toml
-            echo "Added ballerina/Dependencies.toml"
           fi
 
           echo "Staged files:"
           git diff --staged --name-only
 
-          # Clean up temporary files EXCEPT analysis_result.json (needed for PR creation)
           rm -f update_changelog.bal pr_description.txt git_diff.txt client_diff.txt types_diff.txt
 
           if git diff --staged --quiet; then
@@ -344,11 +233,7 @@ jobs:
             else
               COMMIT_MSG="$COMMIT_MSG and regenerate Ballerina files"
             fi
-
-            echo "Committing with message: $COMMIT_MSG"
             git commit -m "$COMMIT_MSG"
-
-            echo "Commit created. Files in commit:"
             git show --name-only --oneline HEAD
           fi
 
@@ -360,190 +245,32 @@ jobs:
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.BALLERINA_BOT_TOKEN }}
-
           script: |
-            const fs = require('fs');
-            const hasCodeChanges = '${{ steps.diff.outputs.has_code_changes }}' === 'true';
-            const gradleBuildFailed = '${{ steps.gradle_build.outcome }}' === 'failure';
-            const analysisFailed = '${{ steps.run_analysis.outcome }}' === 'failure';
-            const pipelineSucceeded = '${{ needs.generate.outputs.pipeline_succeeded }}' === 'true';
-            const branchName = '${{ steps.find_branch.outputs.branch_name }}';
-            const codeOwners = '${{ steps.extract_owners.outputs.code_owners }}';
-
-            let prBody = '';
-            let prTitle = '';
-
-            if (!hasCodeChanges) {
-              // Spec-only branch — no client.bal / types.bal changes
-              prBody = `## Spec-Only Update\n\n`;
-              prBody += `This PR contains only spec/documentation updates — no changes were detected in \`client.bal\` or \`types.bal\`.\n\n`;
-              prBody += `> ℹ️ No version bump or analysis is required.\n\n`;
-              prBody += `---\n\nManual Review Required - Please review the spec changes and approve if appropriate.\n`;
-              prTitle = `[NONE] Auto-generated connector update - no version change`;
-            } else {
-              // analysis_result.json may not exist if analysis failed
-              let analysis = null;
-              try {
-                analysis = JSON.parse(fs.readFileSync('analysis_result.json', 'utf8'));
-              } catch (e) {
-                core.warning('analysis_result.json not found: ' + e.message);
+            const createPr = require('./temp-library/connector_automator/resources/scripts/create_pr.js');
+            return await createPr({
+              github, context, core, require,
+              inputs: {
+                hasCodeChanges:    '${{ steps.diff.outputs.has_code_changes }}' === 'true',
+                gradleBuildFailed: '${{ steps.gradle_build.outcome }}' === 'failure',
+                analysisFailed:    '${{ steps.run_analysis.outcome }}' === 'failure',
+                pipelineSucceeded: '${{ needs.generate.outputs.pipeline_succeeded }}' === 'true',
+                branchName:  '${{ steps.find_branch.outputs.branch_name }}',
+                codeOwners:  '${{ steps.extract_owners.outputs.code_owners }}',
+                newVersion:  '${{ steps.update_version.outputs.new_version }}'
               }
-
-              const changeType = analysis ? analysis.changeType : 'UNKNOWN';
-              const newVersion = '${{ steps.update_version.outputs.new_version }}' || 'unknown';
-
-              function formatChange(change) {
-                const separators = [' - ', ': ', ' – '];
-                let separator = null;
-                let splitIndex = -1;
-
-                for (const sep of separators) {
-                  const idx = change.indexOf(sep);
-                  if (idx > -1) {
-                    separator = sep;
-                    splitIndex = idx;
-                    break;
-                  }
-                }
-
-                if (splitIndex > -1) {
-                  const description = change.substring(0, splitIndex);
-                  const details = change.substring(splitIndex + separator.length);
-                  const descHasCode = description.includes("'") || description.includes('"') || description.includes('`');
-
-                  if (descHasCode) {
-                    const descFormatted = description.replace(/'([^']+)'/g, '`$1`').replace(/"([^"]+)"/g, '`$1`');
-                    return `${descFormatted} - ${details}`;
-                  } else {
-                    return `${description} - \`${details}\``;
-                  }
-                }
-
-                if (change.includes("'") || change.includes('"')) {
-                  return change.replace(/'([^']+)'/g, '`$1`').replace(/"([^"]+)"/g, '`$1`');
-                }
-
-                return change;
-              }
-
-              prBody = `## Version Change Analysis\n\n`;
-
-              if (analysisFailed) {
-                prBody += `> ⚠️ WARNING: ANALYSIS FAILED — version and changelog could not be determined automatically. Manual review required.\n\n`;
-              }
-              if (gradleBuildFailed) {
-                prBody += `> ⚠️ WARNING: GRADLE BUILD FAILED — Manual intervention required\n\n`;
-              }
-              if (!pipelineSucceeded) {
-                prBody += `> ℹ️ NOTE: Gradle build was skipped — generation pipeline did not succeed, building against old files would give false results.\n\n`;
-              }
-
-              prBody += `**Recommended Version Bump:** \`${changeType}\`\n`;
-              prBody += `**New Version:** \`${newVersion}\`\n`;
-              if (analysis) prBody += `**Confidence:** ${analysis.confidence}\n`;
-              const buildStatusText = gradleBuildFailed ? '❌ FAILED' : (!pipelineSucceeded ? '⏭️ Skipped (generation pipeline failed)' : '✅ Success');
-              prBody += `**Build Status:** ${buildStatusText}\n`;
-
-              if (codeOwners) {
-                prBody += `**Code Owners:** ${codeOwners.split(',').map(o => `@${o}`).join(', ')}\n`;
-              }
-
-              if (analysis) {
-                prBody += `\n### Summary\n${analysis.summary}\n\n`;
-
-                if (analysis.breakingChanges.length > 0) {
-                  prBody += `### Breaking Changes\n`;
-                  analysis.breakingChanges.forEach(change => { prBody += `- ${formatChange(change)}\n`; });
-                  prBody += '\n';
-                }
-                if (analysis.newFeatures.length > 0) {
-                  prBody += `### New Features\n`;
-                  analysis.newFeatures.forEach(feature => { prBody += `- ${formatChange(feature)}\n`; });
-                  prBody += '\n';
-                }
-                if (analysis.bugFixes.length > 0) {
-                  prBody += `### Improvements\n`;
-                  analysis.bugFixes.forEach(fix => { prBody += `- ${formatChange(fix)}\n`; });
-                  prBody += '\n';
-                }
-              }
-
-              const doNotMergePrefix = pipelineSucceeded ? '' : '[DO NOT MERGE] ';
-              const analysisPrefix = analysisFailed ? '[ANALYSIS FAILED] ' : '';
-              const buildStatusPfx = gradleBuildFailed ? '[BUILD FAILED] ' : '';
-
-              const { execSync } = require('child_process');
-              const hasChangelogUpdate = (() => {
-                try {
-                  const branchDiff = execSync('git diff --name-only origin/main...HEAD -- CHANGELOG.md', { encoding: 'utf8' }).trim();
-                  if (branchDiff.split('\n').includes('CHANGELOG.md')) {
-                    return true;
-                  }
-                } catch (error) {
-                  core.warning(`Unable to determine branch diff for CHANGELOG.md: ${error.message}`);
-                }
-                try {
-                  const workingTreeStatus = execSync('git status --short -- CHANGELOG.md', { encoding: 'utf8' }).trim();
-                  return workingTreeStatus.length > 0;
-                } catch (error) {
-                  core.warning(`Unable to determine working tree status for CHANGELOG.md: ${error.message}`);
-                  return false;
-                }
-              })();
-              prBody += `---\n\n`;
-              if (gradleBuildFailed) {
-                prBody += `⚠️ BUILD FAILED - Please fix the Gradle build errors before merging.\n`;
-              }
-              if (hasChangelogUpdate) {
-                prBody += `**CHANGELOG.md** has been automatically updated.\n\n`;
-              }
-              prBody += `Manual Review Required - Please review the changes and approve if appropriate.\n`;
-
-              prTitle = `${doNotMergePrefix}${buildStatusPfx}${analysisPrefix}[${changeType}] Auto-generated connector update - v${newVersion}`;
-            }
-
-            const pr = await github.rest.pulls.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: prTitle,
-              head: branchName,
-              base: 'main',
-              body: prBody
             });
-
-            console.log(`Created PR #${pr.data.number}`);
-            core.setOutput('pr_number', pr.data.number);
-            core.setOutput('pr_url', pr.data.html_url);
-            core.setOutput('pr_title', pr.data.title);
-
-            return pr.data.number;
 
       - name: Add labels to PR
         if: steps.create_pr.outcome == 'success' && steps.diff.outputs.has_changes == 'true'
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.BALLERINA_BOT_TOKEN }}
-          script: |
-            const hasCodeChanges = '${{ steps.diff.outputs.has_code_changes }}' === 'true';
-            const gradleBuildFailed = '${{ steps.gradle_build.outcome }}' === 'failure';
-            const analysisFailed = '${{ steps.run_analysis.outcome }}' === 'failure';
-            const pipelineSucceeded = '${{ needs.generate.outputs.pipeline_succeeded }}' === 'true';
-            const labels = ['manual-review-required'];
-
-            if (!hasCodeChanges) {
-              labels.push('up-to-date');
-            } else {
-              if (gradleBuildFailed) labels.push('build-failed');
-              if (analysisFailed) labels.push('analysis-failed');
-            }
-            if (!pipelineSucceeded) labels.push('do-not-merge');
-
-            await github.rest.issues.addLabels({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: ${{ steps.create_pr.outputs.result }},
-              labels: labels
-            });
+        env:
+          GITHUB_TOKEN: ${{ secrets.BALLERINA_BOT_TOKEN }}
+        run: |
+          bash temp-library/connector_automator/resources/scripts/add_labels.sh \
+            "${{ steps.create_pr.outputs.result }}" \
+            "${{ steps.diff.outputs.has_code_changes }}" \
+            "${{ steps.gradle_build.outcome == 'failure' && 'true' || 'false' }}" \
+            "${{ steps.run_analysis.outcome == 'failure' && 'true' || 'false' }}" \
+            "${{ needs.generate.outputs.pipeline_succeeded }}"
 
       - name: Upload analysis results
         if: steps.diff.outputs.has_changes == 'true'
