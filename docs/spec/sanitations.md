@@ -1,6 +1,6 @@
 _Author_:  @arunapriyadarshana \
 _Created_: 2025/02/14 \
-_Updated_: 2025/02/17 \
+_Updated_: 2026/06/18 \\
 _Edition_: Swan Lake
 
 # Sanitation for OpenAPI specification
@@ -23,7 +23,7 @@ These changes are done in order to improve the overall usability, and as workaro
 
 - **Updated**: Common prefix is now removed from the endpoints as it is included in the base URL.
 - **Reason**: This change simplifies the API paths, making them shorter and more readable.
- 
+
 3. Update the `date-time` into `datetime` to make it compatible with the ballerina type conversions
 - **Original**: `"foramt":"date-time"`
 - **Updated**: `"foramt":"datetime"`
@@ -60,6 +60,7 @@ These changes are done in order to improve the overall usability, and as workaro
 
 - **Updated**:`"int value"`
 - **Reason**: The field `value` in the DateTime record can hold a larger value than int:signed32 can accommodate. Therefore, int:signed32 has been replaced with integer to allow for larger values.
+
 ## OpenAPI cli command
 
 The following command was used to generate the Ballerina client from the OpenAPI specification. The command should be executed from the repository root directory.

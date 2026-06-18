@@ -41,6 +41,8 @@ public isolated client class Client {
 
     # Removes Links Between Objects
     #
+    # + fromObjectType - The CRM object type of the source object in the association to archive.
+    # + toObjectType - The CRM object type of the target object in the association to archive.
     # + headers - Headers to be sent with the request 
     # + return - Returns `http:Response` with status **204 No Content** on success, indicating successful deletion 
     resource isolated function post associations/[string fromObjectType]/[string toObjectType]/batch/archive(BatchInputPublicAssociationMultiArchive payload, map<string|string[]> headers = {}) returns error? {
@@ -59,6 +61,8 @@ public isolated client class Client {
 
     # Creates Custom Associations
     #
+    # + fromObjectType - The CRM object type of the source object in the association to create.
+    # + toObjectType - The CRM object type of the target object in the association to create.
     # + headers - Headers to be sent with the request 
     # + return - successful operation 
     resource isolated function post associations/[string fromObjectType]/[string toObjectType]/batch/create(BatchInputPublicAssociationMultiPost payload, map<string|string[]> headers = {}) returns BatchResponseLabelsBetweenObjectPair|BatchResponseLabelsBetweenObjectPairWithErrors|error {
@@ -75,8 +79,9 @@ public isolated client class Client {
         return self.clientEp->post(resourcePath, request, httpHeaders);
     }
 
-    # Report
+    # Request high-usage associations report
     #
+    # + userId - The ID of the user for whom the high-usage association report is requested.
     # + headers - Headers to be sent with the request 
     # + return - successful operation 
     resource isolated function post associations/usage/high\-usage\-report/[int:Signed32 userId](map<string|string[]> headers = {}) returns ReportCreationResponse|error {
@@ -93,6 +98,8 @@ public isolated client class Client {
 
     # Delete Specific Labels
     #
+    # + fromObjectType - The CRM object type of the source object whose association labels will be archived.
+    # + toObjectType - The CRM object type of the target object whose association labels will be archived.
     # + headers - Headers to be sent with the request 
     # + return - Returns `http:Response` with status **204 No Content** on success, indicating successful deletion 
     resource isolated function post associations/[string fromObjectType]/[string toObjectType]/batch/labels/archive(BatchInputPublicAssociationMultiPost payload, map<string|string[]> headers = {}) returns error? {
@@ -111,6 +118,8 @@ public isolated client class Client {
 
     # Read Associations
     #
+    # + fromObjectType - The CRM object type of the source objects whose associations will be read.
+    # + toObjectType - The CRM object type of the target objects whose associations will be read.
     # + headers - Headers to be sent with the request 
     # + return - successful operation 
     resource isolated function post associations/[string fromObjectType]/[string toObjectType]/batch/read(BatchInputPublicFetchAssociationsBatchRequest payload, map<string|string[]> headers = {}) returns BatchResponsePublicAssociationMultiWithLabel|BatchResponsePublicAssociationMultiWithLabelWithErrors|error {
@@ -127,8 +136,10 @@ public isolated client class Client {
         return self.clientEp->post(resourcePath, request, httpHeaders);
     }
 
-    # Creates a Default HubSpot-Defined Association
+    # Batch create default associations
     #
+    # + fromObjectType - The CRM object type of the source object for the default association to create.
+    # + toObjectType - The CRM object type of the target object for the default association to create.
     # + headers - Headers to be sent with the request 
     # + return - successful operation 
     resource isolated function post associations/[string fromObjectType]/[string toObjectType]/batch/associate/default(BatchInputPublicDefaultAssociationMultiPost payload, map<string|string[]> headers = {}) returns BatchResponsePublicDefaultAssociation|error {
@@ -145,8 +156,12 @@ public isolated client class Client {
         return self.clientEp->post(resourcePath, request, httpHeaders);
     }
 
-    # Create Association Labels Between Two Records
+    # Create association labels
     #
+    # + objectType - The CRM object type of the source object for the association being created.
+    # + objectId - The unique identifier of the source CRM object for the association being created.
+    # + toObjectType - The CRM object type of the target object for the association being created.
+    # + toObjectId - The unique identifier of the target CRM object for the association being created.
     # + headers - Headers to be sent with the request 
     # + return - successful operation 
     resource isolated function put objects/[string objectType]/[string objectId]/associations/[string toObjectType]/[string toObjectId](AssociationSpec[] payload, map<string|string[]> headers = {}) returns LabelsBetweenObjectPair|error {
@@ -163,8 +178,12 @@ public isolated client class Client {
         return self.clientEp->put(resourcePath, request, httpHeaders);
     }
 
-    # Deletes all associations between two records
+    # Delete all record associations
     #
+    # + objectType - The CRM object type of the source object whose association will be deleted.
+    # + objectId - The unique identifier of the source CRM object whose association will be deleted.
+    # + toObjectType - The CRM object type of the target object whose association will be deleted.
+    # + toObjectId - The unique identifier of the target CRM object whose association will be deleted.
     # + headers - Headers to be sent with the request 
     # + return - Returns `http:Response` with status **204 No Content** on success, indicating successful deletion 
     resource isolated function delete objects/[string objectType]/[string objectId]/associations/[string toObjectType]/[string toObjectId](map<string|string[]> headers = {}) returns error? {
@@ -178,8 +197,11 @@ public isolated client class Client {
         return self.clientEp->delete(resourcePath, headers = httpHeaders);
     }
 
-    # List Associations of an Object by Type
+    # List associations by type
     #
+    # + objectType - The type of the source CRM object whose associations are being retrieved.
+    # + objectId - The unique identifier of the source CRM object whose associations are being listed.
+    # + toObjectType - The type of the target CRM object to which associations are being retrieved.
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - successful operation 
@@ -195,8 +217,12 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, httpHeaders);
     }
 
-    # Create Default Association Between Two Object Types
+    # Create default association
     #
+    # + fromObjectType - The type of the source CRM object from which the default association originates.
+    # + fromObjectId - The unique identifier of the source CRM object initiating the default association.
+    # + toObjectType - The type of the target CRM object to which the default association is being created.
+    # + toObjectId - The unique identifier of the target CRM object receiving the default association.
     # + headers - Headers to be sent with the request 
     # + return - successful operation 
     resource isolated function put objects/[string fromObjectType]/[string fromObjectId]/associations/default/[string toObjectType]/[string toObjectId](map<string|string[]> headers = {}) returns BatchResponsePublicDefaultAssociation|error {
